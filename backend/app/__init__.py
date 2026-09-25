@@ -88,7 +88,24 @@ def create_app(config_class=Config):
             from app.models.category import Category
             db.create_all()
 
-        except Exception:
+            # Auto-create admin user if database is empty
+            from app.models.user import User
+            if not db.session.query(User).first():
+                from werkzeug.security import generate_password_hash
+                admin = User(
+                    username="admin",
+                    email="admin@expenseflow.local",
+                    password_hash=generate_password_hash("admin123"),
+                    full_name="System Admin",
+                    role="super_admin",
+                    is_active=True
+                )
+                db.session.add(admin)
+                db.session.commit()
+                print("Default admin user created: admin / admin123")
+
+        except Exception as e:
+            print(f"Database initialization error: {e}")
             pass
 
     # Uploads Static Route with Security Hardening
