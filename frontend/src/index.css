@@ -352,24 +352,31 @@ a { text-decoration: none; color: inherit; }
 
 /* Responsive Adjustments */
 @media(max-width: 900px) {
-  .login-layout { flex-direction: column; max-width: 400px; }
+  .login-shell { padding: 20px; }
+  .login-layout { flex-direction: column; max-width: 100%; border: none; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.4); border-radius: 20px; }
+  .login-panel { padding: 32px 24px; }
   .login-showcase { display: none; }
-  .mobile-brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; gap: 12px; }
+  .mobile-brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; gap: 8px; text-align: center; }
+  .mobile-brand strong { font-size: 24px; }
+  .login-panel h2 { font-size: 24px; text-align: center; }
+  .login-subtitle { text-align: center; font-size: 14px; margin-bottom: 24px; }
+  .login-label { text-align: center; }
+  
   .app-shell { flex-direction: column; }
   .sidebar { display: none !important; }
   .sidebar-brand { margin-bottom: 0; }
-  .page-container { padding: 24px; }
-  .top-header { padding: 20px 24px; }
+  .page-container { padding: 16px; }
+  .top-header { padding: 16px; }
   .modern-form { grid-template-columns: 1fr; }
   .table-head, .table-row { grid-template-columns: 1fr; gap: 8px; }
   .table-head { display: none; }
-  .table-row { padding: 12px; position: relative; }
-  .action-buttons { justify-content: flex-end; margin-top: 8px; position: absolute; right: 12px; top: 12px; }
-  .amount-negative { margin-left: 0; }
-  .salary-record { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .table-row { padding: 16px; position: relative; border-radius: 12px; margin-bottom: 12px; background: rgba(255,255,255,0.03); }
+  .action-buttons { justify-content: flex-end; margin-top: 8px; position: absolute; right: 16px; top: 16px; }
+  .amount-negative { margin-left: 0; font-size: 1.1rem; }
+  .salary-record { flex-direction: column; align-items: flex-start; gap: 16px; padding: 16px; border-radius: 12px; }
   .salary-record-right { margin-left: 0; width: 100%; justify-content: space-between; }
   .reports-grid { grid-template-columns: 1fr; }
-  .user-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .user-row { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; border-radius: 12px; }
   .user-meta { width: 100%; justify-content: space-between; }
 }
 
