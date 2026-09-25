@@ -3704,11 +3704,15 @@ function Field({
   min,
   ...props
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === "password";
+  const inputType = isPassword ? (showPassword ? "text" : "password") : type;
+
   return (
-    <div className="form-field">
+    <div className="form-field" style={{ position: "relative" }}>
       <label>{label}</label>
       <input
-        type={type}
+        type={inputType}
         name={name}
         value={value}
         onChange={onChange}
@@ -3716,8 +3720,28 @@ function Field({
         required={required}
         disabled={disabled}
         min={min}
+        style={isPassword ? { paddingRight: "40px" } : {}}
         {...props}
       />
+      {isPassword && (
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          style={{
+            position: "absolute",
+            right: "10px",
+            top: "34px",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            opacity: 0.6,
+            fontSize: "1.1rem"
+          }}
+          title={showPassword ? "Hide password" : "Show password"}
+        >
+          {showPassword ? "👁️‍🗨️" : "👁️"}
+        </button>
+      )}
     </div>
   );
 }
