@@ -363,7 +363,8 @@ a { text-decoration: none; color: inherit; }
   .login-label { text-align: center; }
   
   .app-shell { flex-direction: column; }
-  .sidebar { display: none !important; }
+  .sidebar:not(.mobile-open) { display: none !important; }
+  .sidebar.mobile-open { display: flex !important; flex-direction: column; }
   .sidebar-brand { margin-bottom: 0; }
   .page-container { padding: 16px; }
   .top-header { padding: 16px; }
@@ -1254,9 +1255,43 @@ body.light-mode .filter-select option { background: #ffffff; color: #0f172a; }
   flex: 1;
 }
 
+.mobile-tab-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .mobile-tab-icon {
   font-size: 20px;
   transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.mobile-tab-badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  background: var(--brand-primary);
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-tab-badge.orange {
+  background: #f97316;
+}
+
+.mobile-tab-badge.danger {
+  background: #ef4444;
 }
 
 .mobile-tab-item.active {
@@ -1351,6 +1386,27 @@ body.light-mode .filter-select option { background: #ffffff; color: #0f172a; }
   
   .top-header p {
     font-size: 0.8rem !important;
+  }
+
+  .header-actions {
+    gap: 8px !important;
+  }
+
+  .header-date {
+    display: none !important;
+  }
+
+  .stat-card.clickable {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .stat-card.clickable:hover {
+    transform: translateY(-2px);
+  }
+
+  .stat-card.clickable:active {
+    transform: scale(0.97);
   }
   
   /* Convert tables to card view on mobile */
@@ -1454,6 +1510,310 @@ body.light-mode .filter-select option { background: #ffffff; color: #0f172a; }
 .fab-action-btn.purple .fab-action-icon {
   background: rgba(139, 92, 246, 0.15);
   color: var(--purple);
+}
+
+.fab-action-btn.emerald .fab-action-icon {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.fab-action-btn.amber .fab-action-icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.fab-action-btn.rose .fab-action-icon {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
+
+.fab-action-btn.primary .fab-action-icon {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--brand-primary);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE "MORE" FULL APP SHEET & MENU
+   ════════════════════════════════════════════════════════════════ */
+.mobile-more-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1040;
+  animation: fadeIn 0.2s ease;
+}
+
+.mobile-more-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px 24px 0 0;
+  padding: 12px 16px 84px 16px;
+  z-index: 1050;
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.7);
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-sheet-drag-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 auto 12px auto;
+}
+
+.mobile-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--brand-primary), #a855f7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.mobile-user-meta {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.mobile-user-meta strong {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.mobile-user-meta span {
+  font-size: 11px;
+  color: var(--brand-primary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.mobile-sheet-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mobile-sheet-close-btn:active {
+  transform: scale(0.92);
+}
+
+.mobile-sheet-section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+.mobile-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.mobile-sheet-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mobile-sheet-card:active {
+  transform: scale(0.97);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.mobile-sheet-card.current {
+  border-color: var(--brand-primary);
+  background: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+}
+
+.mobile-sheet-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.mobile-sheet-card-icon {
+  font-size: 22px;
+}
+
+.mobile-sheet-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  color: var(--text-primary);
+}
+
+.mobile-sheet-card-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.mobile-sheet-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 99px;
+  line-height: 1;
+}
+
+.mobile-sheet-badge.orange {
+  background: rgba(249, 115, 22, 0.2);
+  color: #f97316;
+  border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+.mobile-sheet-badge.danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.mobile-sheet-badge.primary {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--brand-primary);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+}
+
+.mobile-sheet-tools {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.sheet-tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sheet-tool-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sheet-tool-btn.danger {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.sheet-tool-icon {
+  font-size: 18px;
+  position: relative;
+}
+
+.tool-badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  box-shadow: 0 0 6px var(--danger);
+}
+
+/* Light mode overrides for mobile sheets & nav */
+body.light-mode .mobile-more-sheet {
+  background: rgba(255, 255, 255, 0.98);
+  border-top-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .mobile-sheet-header {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .mobile-sheet-card {
+  background: rgba(241, 245, 249, 0.8);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+body.light-mode .sheet-tool-btn {
+  background: rgba(241, 245, 249, 0.8);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+body.light-mode .mobile-sheet-close-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+body.light-mode .mobile-bottom-nav {
+  background: rgba(255, 255, 255, 0.95);
+  border-top-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .fab-action-btn {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* ════════════════════════════════════════════════════════════════

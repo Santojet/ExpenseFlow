@@ -17,8 +17,18 @@ expenses_bp = Blueprint(
 
 
 def expense_response(expense):
+    user_name = None
+    try:
+        user_rel = getattr(expense, "user", None)
+        if user_rel:
+            user_name = user_rel.full_name or user_rel.username
+    except Exception:
+        user_name = None
+
     return {
         "id": expense.id,
+        "user_id": expense.user_id,
+        "user_name": user_name,
         "title": expense.title,
         "amount": float(expense.amount),
         "category": expense.category,
@@ -216,6 +226,7 @@ def get_expenses():
     role = claims.get("role", "user")
 
     target_user_id = request.args.get("user_id", type=int)
+    scope = request.args.get("scope", "all")
 
     query = (
         db.select(Expense)
@@ -223,12 +234,22 @@ def get_expenses():
         .order_by(Expense.expense_date.desc())
     )
 
-    # Admin inspecting specific user:
-    if target_user_id and role in ("admin", "super_admin"):
+    is_admin = role in ("admin", "super_admin")
+    is_admin_view = False
+
+    if target_user_id and is_admin:
         query = query.where(Expense.user_id == target_user_id)
-    else:
-        # Strict privacy: Every user (including Admin/Super Admin) sees ONLY their own expenses
+        is_admin_view = True
+    elif is_admin and scope == "my":
         query = query.where(Expense.user_id == user_id)
+        is_admin_view = False
+    elif is_admin:
+        # Admins view all organization expenses by default
+        is_admin_view = True
+    else:
+        # Regular users only see their own expenses
+        query = query.where(Expense.user_id == user_id)
+        is_admin_view = False
 
     expenses = db.session.execute(query).scalars().all()
 
@@ -237,7 +258,7 @@ def get_expenses():
     return {
         "success": True,
         "expenses": result,
-        "is_admin_view": False,
+        "is_admin_view": is_admin_view,
     }, 200
 
 

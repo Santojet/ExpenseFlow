@@ -87,7 +87,7 @@ function App() {
   const [users, setUsers] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [isAdminView, setIsAdminView] = useState(false);
-  const [expenseScope, setExpenseScope] = useState("my"); // "my" | "all"
+  const [expenseScope, setExpenseScope] = useState("all"); // "all" | "my"
   const [budgets, setBudgets] = useState([]);
   const [goals, setGoals] = useState([]);
   const [currentSavings, setCurrentSavings] = useState(0);
@@ -313,21 +313,27 @@ function App() {
   const loadAllData = async () => {
     setDataLoading(true);
     try {
-      await Promise.all([
+      // Phase 1: Immediately fetch core dashboard data so UI unlocks fast
+      await Promise.allSettled([
         loadCurrentUser(),
-        loadExpenses(),
-        loadSalaries(),
-        checkAdmin(),
-        loadMonthlyData(),
-        loadBudgets(),
-        loadGoals(),
-        loadDebts(),
-        loadCustomCategories(),
+        loadExpenses("all"),
+        loadSalaries("all"),
         loadUpcomingExpenses(),
       ]);
     } finally {
+      // Unblock UI immediately — dashboard is fully usable!
       setDataLoading(false);
     }
+
+    // Phase 2: Fetch remaining sections in parallel without blocking user interaction
+    Promise.allSettled([
+      checkAdmin(),
+      loadMonthlyData(),
+      loadBudgets(),
+      loadGoals(),
+      loadDebts(),
+      loadCustomCategories(),
+    ]).catch(() => {});
   };
 
   const loadDebts = async () => {
@@ -464,12 +470,17 @@ function App() {
     }
   };
 
-  const loadSalaries = async () => {
+  const loadSalaries = async (scope = expenseScope, targetUserId = null) => {
     try {
-      const response = await apiFetch(`${API}/api/salaries`);
+      let url = `${API}/api/salaries?scope=${scope}`;
+      if (targetUserId) url += `&user_id=${targetUserId}`;
+      const response = await apiFetch(url);
       const data = await safeJson(response);
       if (!response.ok) throw new Error(data.message || "Failed to load salaries");
       setSalaries(data.salaries || []);
+      if (data.is_admin_view !== undefined) {
+        setIsAdminView(Boolean(data.is_admin_view));
+      }
     } catch (error) {
       notify(error.message, "error");
     }
@@ -1361,6 +1372,7 @@ function App() {
     reports: t.reports,
     budgets: t.budgets || "Budgets",
     goals: t.savingsGoals || "Goals",
+    categories: t.categories || "Categories",
     profile: t.profile,
   };
 
@@ -1851,10 +1863,11 @@ function App() {
             exportPDF={exportPDF}
             pdfLoading={pdfLoading}
             isAdminView={isAdminView}
+            isAdmin={isAdmin}
             expenseScope={expenseScope}
             setExpenseScope={setExpenseScope}
             drillUser={drillUser}
-            clearDrill={() => { setDrillUser(null); loadExpenses("my"); }}
+            clearDrill={() => { setDrillUser(null); loadExpenses("all"); }}
             onOpenSmsParser={() => setSmsParserOpen(true)}
             customCategories={customCategories}
             t={t}
@@ -1900,6 +1913,9 @@ function App() {
             formatMoney={formatMoney}
             exportSalariesCSV={exportSalariesCSV}
             isAdminView={isAdminView}
+            isAdmin={isAdmin}
+            expenseScope={expenseScope}
+            setExpenseScope={setExpenseScope}
             t={t}
           />
         )}
@@ -2056,13 +2072,54 @@ function App() {
             setActivePage("expenses");
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
+          onOpenAddSalary={() => {
+            resetSalaryForm();
+            setActivePage("salary");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           onOpenAddDebt={() => {
             setActivePage("debts");
             setOpenDebtModal(true);
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
+          onOpenAddBudget={() => {
+            setActivePage("budgets");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          onOpenAddGoal={() => {
+            setActivePage("goals");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           onOpenSmsParser={() => setSmsParserOpen(true)}
           pendingSalaryCount={pendingSalaryCount}
+          budgetsOverCount={budgets.filter((b) => b.is_over).length}
+          canAccessAdmin={canAccessAdmin}
+          loadUsers={loadUsers}
+          onOpenInstall={() => setInstallModalOpen(true)}
+          onOpenSearch={() => setGlobalSearchOpen(true)}
+          unreadNotifCount={unreadNotifCount}
+          onOpenNotif={() => setNotifOpen((prev) => !prev)}
+          theme={theme}
+          onToggleTheme={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+          lang={lang}
+          onToggleLang={() => {
+            const nextLang = lang === "en" ? "bn" : "en";
+            setLang(nextLang);
+            localStorage.setItem("expenseflow_lang", nextLang);
+            setProfileForm((prev) => ({ ...prev, language: nextLang }));
+            apiFetch(`${API}/api/auth/profile`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                full_name: currentUser?.full_name || "",
+                email: currentUser?.email || "",
+                language: nextLang,
+              }),
+            }).catch(() => {});
+          }}
+          currentUser={currentUser}
+          getRoleLabel={getRoleLabel}
+          onLogout={handleLogout}
           t={t}
         />
       )}
@@ -2280,10 +2337,10 @@ function DashboardPage({
       )}
 
       <div className="stats-grid">
-        <StatCard icon="↘" label={t?.totalExpenses || "Total Expenses"} value={formatMoney(totalExpenses)} tone="purple" />
-        <StatCard icon="৳" label={t?.totalSalary || "Total Salary"} value={formatMoney(totalSalary)} tone="green" />
-        <StatCard icon="◫" label={t?.transactionsCount || "Transactions"} value={expenses.length} tone="blue" />
-        <StatCard icon="✓" label={t?.paidSalary || "Paid Salary"} value={formatMoney(paidSalary)} tone="orange" />
+        <StatCard icon="↘" label={t?.totalExpenses || "Total Expenses"} value={formatMoney(totalExpenses)} tone="purple" onClick={() => setActivePage("expenses")} />
+        <StatCard icon="৳" label={t?.totalSalary || "Total Salary"} value={formatMoney(totalSalary)} tone="green" onClick={() => setActivePage("salary")} />
+        <StatCard icon="◫" label={t?.transactionsCount || "Transactions"} value={expenses.length} tone="blue" onClick={() => setActivePage("expenses")} />
+        <StatCard icon="✓" label={t?.paidSalary || "Paid Salary"} value={formatMoney(paidSalary)} tone="orange" onClick={() => setActivePage("salary")} />
       </div>
 
       <div className="dashboard-grid">
@@ -2449,7 +2506,8 @@ function ExpensesPage({
   exportPDF = null,
   pdfLoading = false,
   isAdminView = false,
-  expenseScope = "my",
+  isAdmin = false,
+  expenseScope = "all",
   setExpenseScope = () => {},
   drillUser = null,
   clearDrill = () => {},
@@ -2706,6 +2764,31 @@ function ExpensesPage({
           subtitle={`${expenses.length} transaction${expenses.length === 1 ? "" : "s"}`}
           action={
             <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              {/* Admin Scope Toggle */}
+              {isAdmin && (
+                <div className="view-toggle">
+                  <button
+                    type="button"
+                    className={`view-toggle-btn${expenseScope === "all" ? " active" : ""}`}
+                    onClick={() => {
+                      setExpenseScope("all");
+                      loadExpenses("all");
+                    }}
+                  >
+                    👥 All
+                  </button>
+                  <button
+                    type="button"
+                    className={`view-toggle-btn${expenseScope === "my" ? " active" : ""}`}
+                    onClick={() => {
+                      setExpenseScope("my");
+                      loadExpenses("my");
+                    }}
+                  >
+                    👤 Mine
+                  </button>
+                </div>
+              )}
               {/* View Toggle */}
               <div className="view-toggle">
                 <button className={`view-toggle-btn${expenseView === "list" ? " active" : ""}`} onClick={() => setExpenseView("list")}>☰ List</button>
@@ -2717,7 +2800,7 @@ function ExpensesPage({
                   {pdfLoading ? "..." : "↓ PDF"}
                 </button>
               )}
-              <button className="ghost-btn" onClick={loadExpenses}>↻ Refresh</button>
+              <button className="ghost-btn" onClick={() => loadExpenses(expenseScope)}>↻ Refresh</button>
             </div>
           }
         />
@@ -2971,6 +3054,9 @@ function SalaryPage({
   formatMoney = (v) => `৳ ${Number(v || 0).toLocaleString("en-BD")}`,
   exportSalariesCSV = null,
   isAdminView = false,
+  isAdmin = false,
+  expenseScope = "all",
+  setExpenseScope = () => {},
   t = {},
 }) {
   const clearFilters = () => { setSalaryDateFrom(""); setSalaryDateTo(""); };
@@ -3034,13 +3120,38 @@ function SalaryPage({
           title={`${t?.salaryRecords || "Salary records"}${isAdminView ? " (All Users)" : ""}`}
           subtitle={`${salaries.length} ${t?.transactionsCount || "records"}`}
           action={
-            <div style={{ display: "flex", gap: "8px" }}>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              {/* Admin Scope Toggle */}
+              {isAdmin && (
+                <div className="view-toggle">
+                  <button
+                    type="button"
+                    className={`view-toggle-btn${expenseScope === "all" ? " active" : ""}`}
+                    onClick={() => {
+                      setExpenseScope("all");
+                      loadSalaries("all");
+                    }}
+                  >
+                    👥 All
+                  </button>
+                  <button
+                    type="button"
+                    className={`view-toggle-btn${expenseScope === "my" ? " active" : ""}`}
+                    onClick={() => {
+                      setExpenseScope("my");
+                      loadSalaries("my");
+                    }}
+                  >
+                    👤 Mine
+                  </button>
+                </div>
+              )}
               {exportSalariesCSV && (
                 <button className="export-btn csv" onClick={exportSalariesCSV} title="Export to CSV">
                   ↓ CSV
                 </button>
               )}
-              <button className="ghost-btn" onClick={loadSalaries}>↻ {t?.refresh || "Refresh"}</button>
+              <button className="ghost-btn" onClick={() => loadSalaries(expenseScope)}>↻ {t?.refresh || "Refresh"}</button>
             </div>
           }
         />
@@ -3765,9 +3876,15 @@ function SelectField({ label, name, value, onChange, options }) {
   );
 }
 
-function StatCard({ icon, label, value, tone = "purple" }) {
+function StatCard({ icon, label, value, tone = "purple", onClick = null }) {
   return (
-    <div className="stat-card">
+    <div
+      className={`stat-card${onClick ? " clickable" : ""}`}
+      onClick={onClick}
+      style={onClick ? { cursor: "pointer" } : {}}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+    >
       <div className={`stat-icon ${tone}`}>{icon}</div>
       <div className="stat-content">
         <span>{label}</span>

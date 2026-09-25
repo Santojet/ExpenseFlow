@@ -107,6 +107,7 @@ def get_salaries():
     role = claims.get("role", "user")
 
     target_user_id = request.args.get("user_id", type=int)
+    scope = request.args.get("scope", "all")
 
     query = (
         db.select(Salary)
@@ -114,17 +115,35 @@ def get_salaries():
         .order_by(Salary.salary_month.desc())
     )
 
-    # Admin inspecting specific user:
-    if target_user_id and role in ("admin", "super_admin"):
+    is_admin = role in ("admin", "super_admin")
+    is_admin_view = False
+
+    if target_user_id and is_admin:
         query = query.where(Salary.user_id == target_user_id)
-    else:
-        # Strict privacy: Every user (including Admin/Super Admin) sees ONLY their own salary
+        is_admin_view = True
+    elif is_admin and scope == "my":
         query = query.where(Salary.user_id == user_id)
+        is_admin_view = False
+    elif is_admin:
+        # Admins view all organization salaries by default
+        is_admin_view = True
+    else:
+        # Regular users only see their own salary
+        query = query.where(Salary.user_id == user_id)
+        is_admin_view = False
 
     salaries = db.session.execute(query).scalars().all()
 
     result = []
     for salary in salaries:
+        u_name = None
+        try:
+            user_rel = getattr(salary, "user", None)
+            if user_rel:
+                u_name = user_rel.full_name or user_rel.username
+        except Exception:
+            u_name = None
+
         result.append({
             "id": salary.id,
             "amount": float(salary.amount),
@@ -137,12 +156,13 @@ def get_salaries():
             "status": salary.status,
             "description": salary.description,
             "user_id": salary.user_id,
+            "user_name": u_name,
         })
 
     return {
         "success": True,
         "salaries": result,
-        "is_admin_view": False,
+        "is_admin_view": is_admin_view,
     }, 200
 
 
