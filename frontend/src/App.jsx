@@ -182,8 +182,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (loggedIn) loadAllData();
+    if (loggedIn) {
+      loadAllData();
+    } else {
+      // Warm up Render backend immediately when on login screen
+      fetch(`${API}/api/health`).catch(() => {});
+    }
   }, [loggedIn]);
+
 
   useEffect(() => {
     if (!message) return;
@@ -304,11 +310,14 @@ function App() {
         if (data.user.role === "admin" || data.user.role === "super_admin") {
           setIsAdmin(true);
         }
+      } else {
+        _doLogout();
       }
     } catch {
-      // Ignore
+      _doLogout();
     }
   };
+
 
   const loadAllData = async () => {
     setDataLoading(true);
