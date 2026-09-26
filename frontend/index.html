@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="theme-color" content="#6366f1" />
     <meta name="description" content="ExpenseFlow Pro - Enterprise Expense & Payroll Management" />
     <link rel="manifest" href="/manifest.json" />
@@ -17,7 +20,6 @@
           <div style="font-size: 26px; font-weight: 700; color: #6366f1; margin-bottom: 8px;">ExpenseFlow PRO</div>
           <div style="font-size: 14px; opacity: 0.8; margin-bottom: 16px;">Loading application...</div>
           <div id="loader-fallback" style="display: none; margin-top: 16px;">
-            <p style="font-size: 12px; color: #f87171; margin-bottom: 10px;">New version available or network delay detected.</p>
             <button onclick="clearCacheAndReload()" style="background: #6366f1; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; box-shadow: 0 4px 12px rgba(99,102,241,0.4);">
               ↻ Refresh Application
             </button>
@@ -44,6 +46,15 @@
         window.location.reload(true);
       }
 
+      // Automatically unregister any legacy service workers on page load
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var i = 0; i < registrations.length; i++) {
+            registrations[i].unregister();
+          }
+        });
+      }
+
       // Show refresh button if React initialization is delayed past 3 seconds
       setTimeout(function() {
         var loader = document.getElementById('initial-loader');
@@ -52,14 +63,6 @@
           fallback.style.display = 'block';
         }
       }, 3000);
-
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').then(function(reg) {
-            reg.update();
-          }).catch(function() {});
-        });
-      }
     </script>
   </body>
 </html>
