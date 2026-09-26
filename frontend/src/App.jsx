@@ -23,7 +23,7 @@ import { playSuccessChime, playExpenseSound, playDebtSound, playSalarySound } fr
 import { exportToCsv, generatePdfStatement } from "./utils/exportUtils";
 import CategoriesPage from "./components/CategoriesPage";
 
-export const API = import.meta.env.VITE_API_URL || "";
+export const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "https://expenseflow-api-56ap.onrender.com" : "");
 
 const COLORS = [
   "#7c3aed",
