@@ -198,11 +198,75 @@ a { text-decoration: none; color: inherit; }
 .hero-ghost { width: auto; padding: 12px 24px; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--text-primary); transition: all 0.2s; }
 .hero-ghost:hover { background: rgba(255, 255, 255, 0.1); }
 
-.hero-balance { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); padding: 32px; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.1); text-align: right; min-width: 250px; z-index: 1; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3); }
-.hero-balance > span { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
-.hero-balance strong { display: block; font-size: 36px; font-weight: 700; color: var(--success); margin-bottom: 16px; }
-.balance-line { height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
-.balance-line div { height: 100%; background: linear-gradient(90deg, var(--brand-primary), var(--success)); border-radius: 3px; }
+.hero-balance {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  backdrop-filter: blur(12px);
+  padding: 28px 32px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(16, 185, 129, 0.4);
+  text-align: right;
+  min-width: 260px;
+  z-index: 1;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.4), 0 0 20px rgba(16, 185, 129, 0.15);
+  transition: all 0.3s ease;
+}
+.hero-balance > span {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #a7f3d0;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.hero-balance strong {
+  display: block;
+  font-size: 38px;
+  font-weight: 800;
+  color: #10b981;
+  margin-bottom: 14px;
+  line-height: 1.1;
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.3));
+}
+.balance-line {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.balance-line div {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  border-radius: 4px;
+}
+.hero-balance small {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+/* Light Mode Styling for Hero Balance Card */
+body.light-mode .hero-balance {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border: 1.5px solid #10b981;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+body.light-mode .hero-balance > span {
+  color: #047857;
+}
+body.light-mode .hero-balance strong {
+  color: #059669;
+  filter: none;
+}
+body.light-mode .balance-line {
+  background: #e2e8f0;
+}
+body.light-mode .hero-balance small {
+  color: #334155;
+}
+
 
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
 .stats-grid.compact { gap: 16px; }
