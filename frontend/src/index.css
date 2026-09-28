@@ -1500,52 +1500,161 @@ body.light-mode .filter-select option { background: #ffffff; color: #0f172a; }
   
   .page-container {
     padding: 16px 12px !important;
+    gap: 16px !important;
   }
   
+  /* ── Stats grid: 2-column on mobile ── */
   .stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
   }
-  
+
+  /* ── Stat card: compact on mobile ── */
+  .stat-card {
+    padding: 14px 12px !important;
+    gap: 10px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .stat-icon {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    font-size: 16px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .stat-content {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    flex: 1 !important;
+  }
+
+  .stat-content span {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  .stat-content strong {
+    font-size: 18px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  /* ── Hero panel: vertical stack on mobile ── */
+  .hero-panel {
+    flex-direction: column !important;
+    padding: 20px 16px !important;
+    gap: 20px !important;
+    align-items: flex-start !important;
+  }
+
+  .hero-copy {
+    max-width: 100% !important;
+  }
+
+  .hero-copy h2 {
+    font-size: 24px !important;
+  }
+
+  .hero-copy p {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hero-balance {
+    width: 100% !important;
+    min-width: unset !important;
+    padding: 16px 18px !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-balance strong {
+    font-size: 28px !important;
+  }
+
+  .hero-actions {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  /* ── Dashboard grid: single column on mobile ── */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* ── Top header ── */
   .top-header {
-    padding: 16px !important;
+    padding: 12px 16px !important;
     position: sticky;
     top: 0;
     z-index: 900;
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255,255,255,0.05);
   }
   
   .top-header h1 {
-    font-size: 1.3rem !important;
+    font-size: 1.2rem !important;
   }
   
   .top-header p {
-    font-size: 0.8rem !important;
+    font-size: 0.75rem !important;
+    display: none !important;
   }
 
   .header-actions {
-    gap: 8px !important;
+    gap: 6px !important;
+  }
+
+  .theme-toggle-btn span:not(.btn-text) {
+    display: none !important;
   }
 
   .header-date {
     display: none !important;
   }
 
-  .stat-card.clickable {
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  /* ── Sidebar: hide on mobile (hamburger instead) ── */
+  .sidebar {
+    display: none !important;
+  }
+  .sidebar.mobile-open {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 280px !important;
+    height: 100vh !important;
+    z-index: 1100 !important;
   }
 
-  .stat-card.clickable:hover {
-    transform: translateY(-2px);
+  /* ── Content card: reduce padding ── */
+  .content-card {
+    padding: 16px !important;
   }
 
-  .stat-card.clickable:active {
-    transform: scale(0.97);
+  /* ── Card header ── */
+  .card-header {
+    margin-bottom: 16px !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
   }
+
+  .card-header h2 {
+    font-size: 15px !important;
+  }
+
+
   
   /* Convert tables to card view on mobile */
   .modern-table {
