@@ -33,8 +33,7 @@ def get_engine_url():
 
 
 from app.extensions import db
-from app.models.organization import Organization
-from app.models.user import User
+import app.models
 
 target_metadata = db.metadata
 config.set_main_option('sqlalchemy.url', get_engine_url())

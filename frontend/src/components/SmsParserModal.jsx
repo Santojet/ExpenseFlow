@@ -99,7 +99,7 @@ export default function SmsParserModal({ isOpen, onClose, onParsedExpense, t = {
                   fontSize: "12px",
                   border: "1px solid var(--border-subtle)",
                   borderRadius: "6px",
-                  background: "rgba(255, 255, 255, 0.04)"
+                  background: "var(--bg-surface)"
                 }}
               >
                 {s.label}

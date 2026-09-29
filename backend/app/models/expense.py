@@ -81,5 +81,17 @@ class Expense(BaseModel):
         nullable=True,
     )
 
+    status: Mapped[str] = mapped_column(
+        String(20),
+        default="approved",
+        nullable=False,
+    )
+
+    approved_by_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=True,
+    )
+
     organization = relationship("Organization")
-    user = relationship("User")
+    user = relationship("User", foreign_keys=[user_id])
+    approved_by = relationship("User", foreign_keys=[approved_by_id])

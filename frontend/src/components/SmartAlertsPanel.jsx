@@ -32,13 +32,13 @@ function AlertCard({ alert, onDismiss, dismissed }) {
       }} />
 
       <div style={{ flex: 1 }}>
-        <div style={{ color: "#fff", fontSize: "14px", lineHeight: 1.5, fontWeight: 500 }}>
+        <div style={{ color: "var(--text-primary)", fontSize: "14px", lineHeight: 1.5, fontWeight: 500 }}>
           {alert.message}
         </div>
 
         {alert.type === "over_budget" || alert.type === "near_limit" ? (
           <div style={{ marginTop: "8px" }}>
-            <div style={{ height: "5px", background: "rgba(255,255,255,0.08)", borderRadius: "3px", overflow: "hidden" }}>
+            <div style={{ height: "5px", background: "var(--bg-surface-hover)", borderRadius: "3px", overflow: "hidden" }}>
               <div style={{
                 height: "100%",
                 width: `${Math.min(100, alert.percentage)}%`,
@@ -49,14 +49,14 @@ function AlertCard({ alert, onDismiss, dismissed }) {
                 transition: "width 0.8s ease",
               }} />
             </div>
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", marginTop: "4px" }}>
+            <div style={{ color: "var(--text-primary)", fontSize: "11px", marginTop: "4px" }}>
               {alert.percentage}% used — ৳{alert.spent?.toLocaleString()} / ৳{alert.limit?.toLocaleString()}
             </div>
           </div>
         ) : alert.type === "upcoming_recurring" ? (
           <div style={{
             marginTop: "6px", display: "flex", gap: "10px",
-            color: "rgba(255,255,255,0.45)", fontSize: "12px",
+            color: "var(--text-primary)", fontSize: "12px",
           }}>
             <span>📅 Due: {new Date(alert.due_date).toLocaleDateString("en-BD", { day: "numeric", month: "short" })}</span>
             <span>💰 ৳{alert.amount?.toLocaleString()}</span>
@@ -68,7 +68,7 @@ function AlertCard({ alert, onDismiss, dismissed }) {
       <button
         onClick={() => onDismiss(alert)}
         style={{
-          background: "none", border: "none", color: "rgba(255,255,255,0.3)",
+          background: "none", border: "none", color: "var(--text-secondary)",
           cursor: "pointer", fontSize: "16px", padding: "0", flexShrink: 0,
           transition: "color 0.2s",
         }}
@@ -144,7 +144,7 @@ export default function SmartAlertsPanel({ isOpen, onClose, onBudgetClick }) {
         width: "min(420px, 100vw)",
         background: "rgba(10,6,24,0.98)",
         backdropFilter: "blur(20px)",
-        borderLeft: "1px solid rgba(255,255,255,0.08)",
+        borderLeft: "1px solid var(--border-subtle)",
         display: "flex", flexDirection: "column",
         animation: "slideInRight 0.3s ease",
         overflowY: "auto",
@@ -152,7 +152,7 @@ export default function SmartAlertsPanel({ isOpen, onClose, onBudgetClick }) {
         {/* Header */}
         <div style={{
           padding: "20px 24px 16px",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          borderBottom: "1px solid var(--border-subtle)",
           display: "flex", justifyContent: "space-between", alignItems: "center",
           position: "sticky", top: 0,
           background: "rgba(10,6,24,0.98)",
@@ -160,13 +160,13 @@ export default function SmartAlertsPanel({ isOpen, onClose, onBudgetClick }) {
           zIndex: 1,
         }}>
           <div>
-            <div style={{ color: "#fff", fontWeight: 800, fontSize: "18px" }}>🔔 Smart Alerts</div>
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", marginTop: "2px" }}>
+            <div style={{ color: "var(--text-primary)", fontWeight: 800, fontSize: "18px" }}>🔔 Smart Alerts</div>
+            <div style={{ color: "var(--text-primary)", fontSize: "12px", marginTop: "2px" }}>
               {visibleAlerts.length} active alerts
             </div>
           </div>
           <button onClick={onClose} style={{
-            background: "rgba(255,255,255,0.06)", border: "none", color: "rgba(255,255,255,0.7)",
+            background: "var(--bg-surface-hover)", border: "none", color: "var(--text-primary)",
             width: "32px", height: "32px", borderRadius: "8px", cursor: "pointer",
             fontSize: "16px", display: "flex", alignItems: "center", justifyContent: "center",
             transition: "all 0.2s",
@@ -206,10 +206,10 @@ export default function SmartAlertsPanel({ isOpen, onClose, onBudgetClick }) {
           ) : visibleAlerts.length === 0 ? (
             <div style={{ textAlign: "center", padding: "60px 20px" }}>
               <div style={{ fontSize: "48px", marginBottom: "16px" }}>✅</div>
-              <div style={{ color: "#fff", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>
+              <div style={{ color: "var(--text-primary)", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>
                 All Clear!
               </div>
-              <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px" }}>
+              <div style={{ color: "var(--text-primary)", fontSize: "13px" }}>
                 No budget alerts or upcoming expenses right now.
               </div>
             </div>
@@ -237,7 +237,7 @@ export default function SmartAlertsPanel({ isOpen, onClose, onBudgetClick }) {
         {/* Footer Actions */}
         <div style={{
           padding: "16px 24px",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
+          borderTop: "1px solid var(--border-subtle)",
           display: "flex", gap: "10px",
         }}>
           <button
@@ -245,7 +245,7 @@ export default function SmartAlertsPanel({ isOpen, onClose, onBudgetClick }) {
             style={{
               flex: 1, padding: "10px", background: "rgba(124,58,237,0.2)",
               border: "1px solid rgba(124,58,237,0.4)", borderRadius: "10px",
-              color: "#fff", cursor: "pointer", fontSize: "13px", fontWeight: 600,
+              color: "var(--text-primary)", cursor: "pointer", fontSize: "13px", fontWeight: 600,
               transition: "all 0.2s",
             }}
             onMouseEnter={e => e.currentTarget.style.background = "rgba(124,58,237,0.35)"}
@@ -259,9 +259,9 @@ export default function SmartAlertsPanel({ isOpen, onClose, onBudgetClick }) {
               localStorage.removeItem("ef_dismissed_alerts");
             }}
             style={{
-              padding: "10px 14px", background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px",
-              color: "rgba(255,255,255,0.5)", cursor: "pointer", fontSize: "12px",
+              padding: "10px 14px", background: "var(--bg-surface-hover)",
+              border: "1px solid var(--border-subtle)", borderRadius: "10px",
+              color: "var(--text-primary)", cursor: "pointer", fontSize: "12px",
               transition: "all 0.2s",
             }}
             title="Show dismissed alerts"
@@ -300,9 +300,9 @@ export function AlertBadge({ onClick }) {
       id="alerts-badge-btn"
       onClick={onClick}
       style={{
-        position: "relative", background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px",
-        padding: "8px 10px", cursor: "pointer", color: "rgba(255,255,255,0.8)",
+        position: "relative", background: "var(--bg-surface-hover)",
+        border: "1px solid var(--border-subtle)", borderRadius: "10px",
+        padding: "8px 10px", cursor: "pointer", color: "var(--text-primary)",
         fontSize: "18px", transition: "all 0.2s", display: "flex", alignItems: "center",
       }}
       onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
@@ -314,7 +314,7 @@ export function AlertBadge({ onClick }) {
         <span style={{
           position: "absolute", top: "-6px", right: "-6px",
           background: hasDanger ? "#ef4444" : "#f59e0b",
-          color: "#fff", borderRadius: "10px",
+          color: "var(--text-primary)", borderRadius: "10px",
           fontSize: "10px", fontWeight: 800,
           padding: "1px 5px", minWidth: "16px", textAlign: "center",
           boxShadow: `0 0 8px ${hasDanger ? "#ef444480" : "#f59e0b80"}`,

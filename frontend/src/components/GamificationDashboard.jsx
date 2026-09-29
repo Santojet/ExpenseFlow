@@ -49,8 +49,8 @@ function BadgeCard({ badge }) {
     }}>
       <span style={{ fontSize: "26px" }}>{badge.icon}</span>
       <div>
-        <div style={{ color: "#fff", fontWeight: 700, fontSize: "13px" }}>{badge.name}</div>
-        <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px" }}>{badge.desc}</div>
+        <div style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "13px" }}>{badge.name}</div>
+        <div style={{ color: "var(--text-primary)", fontSize: "11px" }}>{badge.desc}</div>
       </div>
     </div>
   );
@@ -62,10 +62,10 @@ function ScoreBar({ label, value, max, color }) {
   return (
     <div style={{ marginBottom: "12px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-        <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "13px" }}>{label}</span>
-        <span style={{ color: "#fff", fontWeight: 700, fontSize: "13px" }}>{value}/{max}</span>
+        <span style={{ color: "var(--text-primary)", fontSize: "13px" }}>{label}</span>
+        <span style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "13px" }}>{value}/{max}</span>
       </div>
-      <div style={{ height: "8px", background: "rgba(255,255,255,0.08)", borderRadius: "4px", overflow: "hidden" }}>
+      <div style={{ height: "8px", background: "var(--bg-surface-hover)", borderRadius: "4px", overflow: "hidden" }}>
         <div style={{
           height: "100%", width: `${pct}%`, background: color,
           borderRadius: "4px", transition: "width 1s ease",
@@ -99,7 +99,7 @@ function DayPatternChart({ pattern }) {
                 transition: "height 0.8s ease",
                 minHeight: v > 0 ? "4px" : "0",
               }} />
-              <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "10px" }}>{shortDays[i]}</span>
+              <span style={{ color: "var(--text-primary)", fontSize: "10px" }}>{shortDays[i]}</span>
             </div>
           );
         })}
@@ -137,7 +137,7 @@ export default function GamificationDashboard({ lang = "en" }) {
   );
 
   if (error) return (
-    <div style={{ textAlign: "center", padding: "40px", color: "rgba(255,255,255,0.5)" }}>
+    <div style={{ textAlign: "center", padding: "40px", color: "var(--text-primary)" }}>
       {error}
     </div>
   );
@@ -167,39 +167,39 @@ export default function GamificationDashboard({ lang = "en" }) {
             position: "absolute", top: "50%", left: "50%",
             transform: "translate(-50%,-50%)", textAlign: "center",
           }}>
-            <div style={{ fontSize: "32px", fontWeight: 900, color: "#fff", lineHeight: 1 }}>{score}</div>
-            <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)", marginTop: "4px" }}>/ 100</div>
+            <div style={{ fontSize: "32px", fontWeight: 900, color: "var(--text-primary)", lineHeight: 1 }}>{score}</div>
+            <div style={{ fontSize: "11px", color: "var(--text-primary)", marginTop: "4px" }}>/ 100</div>
           </div>
         </div>
 
         {/* Level & Info */}
         <div style={{ flex: 1, minWidth: "200px" }}>
-          <div style={{ fontSize: "22px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>
+          <div style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "6px" }}>
             {level}
           </div>
-          <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", marginBottom: "20px" }}>
+          <div style={{ color: "var(--text-primary)", fontSize: "14px", marginBottom: "20px" }}>
             Financial Health Score
           </div>
 
           <div style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "26px", fontWeight: 800, color: "#ffd700" }}>🔥 {streak}</div>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px" }}>Day Streak</div>
+              <div style={{ color: "var(--text-primary)", fontSize: "11px" }}>Day Streak</div>
             </div>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "26px", fontWeight: 800, color: "#10b981" }}>{savings_rate}%</div>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px" }}>Savings Rate</div>
+              <div style={{ color: "var(--text-primary)", fontSize: "11px" }}>Savings Rate</div>
             </div>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "26px", fontWeight: 800, color: "#06b6d4" }}>{active_tracking_days}</div>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "11px" }}>Active Days</div>
+              <div style={{ color: "var(--text-primary)", fontSize: "11px" }}>Active Days</div>
             </div>
           </div>
         </div>
 
         {/* Score Breakdown */}
         <div style={{ flex: 1, minWidth: "220px" }}>
-          <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", marginBottom: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+          <div style={{ color: "var(--text-primary)", fontSize: "12px", marginBottom: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>
             Score Breakdown
           </div>
           <ScoreBar label="Budget Adherence" value={score_breakdown.budget_adherence} max={30} color="#7c3aed" />
@@ -213,16 +213,16 @@ export default function GamificationDashboard({ lang = "en" }) {
 
         {/* Badges */}
         <div style={{
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "var(--bg-surface)",
+          border: "1px solid var(--border-subtle)",
           borderRadius: "16px",
           padding: "24px",
         }}>
-          <h3 style={{ color: "#fff", fontSize: "16px", fontWeight: 700, marginBottom: "16px" }}>
+          <h3 style={{ color: "var(--text-primary)", fontSize: "16px", fontWeight: 700, marginBottom: "16px" }}>
             🏅 Earned Badges ({badges.length})
           </h3>
           {badges.length === 0 ? (
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "14px", textAlign: "center", padding: "20px" }}>
+            <div style={{ color: "var(--text-secondary)", fontSize: "14px", textAlign: "center", padding: "20px" }}>
               Keep tracking to earn badges!
             </div>
           ) : (
@@ -234,26 +234,26 @@ export default function GamificationDashboard({ lang = "en" }) {
 
         {/* Behavioral Insights + Day Pattern */}
         <div style={{
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "var(--bg-surface)",
+          border: "1px solid var(--border-subtle)",
           borderRadius: "16px",
           padding: "24px",
         }}>
-          <h3 style={{ color: "#fff", fontSize: "16px", fontWeight: 700, marginBottom: "16px" }}>
+          <h3 style={{ color: "var(--text-primary)", fontSize: "16px", fontWeight: 700, marginBottom: "16px" }}>
             🧬 Behavioral Insights
           </h3>
           {behavioral_insights.length === 0 ? (
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "14px", textAlign: "center", padding: "20px" }}>
+            <div style={{ color: "var(--text-secondary)", fontSize: "14px", textAlign: "center", padding: "20px" }}>
               Add more expenses to unlock insights!
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "20px" }}>
               {behavioral_insights.map((ins, i) => (
                 <div key={i} style={{
-                  background: "rgba(255,255,255,0.05)",
+                  background: "var(--bg-surface-hover)",
                   borderRadius: "10px",
                   padding: "12px 14px",
-                  color: "rgba(255,255,255,0.8)",
+                  color: "var(--text-primary)",
                   fontSize: "13px",
                   lineHeight: 1.5,
                   borderLeft: `3px solid ${ins.type === "weekend_splurge" ? "#ef4444" : "#7c3aed"}`,
@@ -264,7 +264,7 @@ export default function GamificationDashboard({ lang = "en" }) {
             </div>
           )}
 
-          <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "12px", marginBottom: "8px", fontWeight: 600 }}>
+          <div style={{ color: "var(--text-primary)", fontSize: "12px", marginBottom: "8px", fontWeight: 600 }}>
             Weekly Spending Pattern
           </div>
           <DayPatternChart pattern={daily_pattern} />
@@ -273,12 +273,12 @@ export default function GamificationDashboard({ lang = "en" }) {
 
       {/* Level Progress Guide */}
       <div style={{
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background: "var(--bg-surface)",
+        border: "1px solid var(--border-subtle)",
         borderRadius: "16px",
         padding: "24px",
       }}>
-        <h3 style={{ color: "#fff", fontSize: "16px", fontWeight: 700, marginBottom: "20px" }}>
+        <h3 style={{ color: "var(--text-primary)", fontSize: "16px", fontWeight: 700, marginBottom: "20px" }}>
           📈 Level Progression
         </h3>
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -304,10 +304,10 @@ export default function GamificationDashboard({ lang = "en" }) {
                 : "1px solid rgba(255,255,255,0.06)",
               opacity: lvl.achieved ? 1 : 0.4,
             }}>
-              <div style={{ fontSize: "13px", fontWeight: lvl.active ? 700 : 500, color: "#fff" }}>
+              <div style={{ fontSize: "13px", fontWeight: lvl.active ? 700 : 500, color: "var(--text-primary)" }}>
                 {lvl.label}
               </div>
-              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "11px", marginTop: "2px" }}>
+              <div style={{ color: "var(--text-primary)", fontSize: "11px", marginTop: "2px" }}>
                 {lvl.range} pts
               </div>
             </div>

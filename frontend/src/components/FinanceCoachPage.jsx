@@ -38,10 +38,10 @@ export default function FinanceCoachPage({ lang = "en" }) {
         borderRadius: "20px",
         padding: "28px 32px",
       }}>
-        <h2 style={{ color: "#fff", fontSize: "22px", fontWeight: 800, marginBottom: "6px" }}>
+        <h2 style={{ color: "var(--text-primary)", fontSize: "22px", fontWeight: 800, marginBottom: "6px" }}>
           🤖 AI Financial Coach
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", margin: 0 }}>
+        <p style={{ color: "var(--text-primary)", fontSize: "14px", margin: 0 }}>
           Personalized advice and actionable insights based on your recent spending habits.
         </p>
       </div>
@@ -82,7 +82,7 @@ export default function FinanceCoachPage({ lang = "en" }) {
             }}>
               <div style={{
                 fontSize: "28px",
-                background: "rgba(255,255,255,0.05)",
+                background: "var(--bg-surface-hover)",
                 width: "48px", height: "48px",
                 borderRadius: "12px",
                 display: "flex", alignItems: "center", justifyContent: "center",
@@ -92,18 +92,18 @@ export default function FinanceCoachPage({ lang = "en" }) {
                 {item.icon}
               </div>
               <div>
-                <h3 style={{ color: "#fff", fontSize: "16px", fontWeight: 700, marginBottom: "6px" }}>
+                <h3 style={{ color: "var(--text-primary)", fontSize: "16px", fontWeight: 700, marginBottom: "6px" }}>
                   {item.title}
                 </h3>
-                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", lineHeight: "1.5", margin: 0 }}>
+                <p style={{ color: "var(--text-primary)", fontSize: "14px", lineHeight: "1.5", margin: 0 }}>
                   {item.message}
                 </p>
                 {item.action && (
                   <button style={{
                     marginTop: "12px",
                     background: "rgba(255,255,255,0.1)",
-                    border: "1px solid rgba(255,255,255,0.2)",
-                    color: "#fff",
+                    border: "1px solid var(--border-subtle)",
+                    color: "var(--text-primary)",
                     padding: "6px 12px",
                     borderRadius: "6px",
                     fontSize: "12px",

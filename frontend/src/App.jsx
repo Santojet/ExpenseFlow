@@ -2002,7 +2002,7 @@ function App() {
               borderRadius: "16px", padding: "24px 28px", marginBottom: "24px",
             }}>
               <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 800 }}>🔄 Recurring Expenses</h2>
-              <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
+              <p style={{ margin: "4px 0 0", color: "var(--text-primary)", fontSize: "14px" }}>
                 Auto-tracked bills, subscriptions & regular payments
               </p>
             </div>
@@ -2018,7 +2018,7 @@ function App() {
               borderRadius: "16px", padding: "24px 28px", marginBottom: "24px",
             }}>
               <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 800 }}>🏆 Achievements & Financial Health</h2>
-              <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
+              <p style={{ margin: "4px 0 0", color: "var(--text-primary)", fontSize: "14px" }}>
                 Your gamified financial journey — badges, streaks & behavioral insights
               </p>
             </div>
@@ -2034,7 +2034,7 @@ function App() {
               borderRadius: "16px", padding: "24px 28px", marginBottom: "24px",
             }}>
               <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 800 }}>🧠 AI Spending Prediction</h2>
-              <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
+              <p style={{ margin: "4px 0 0", color: "var(--text-primary)", fontSize: "14px" }}>
                 Machine-learning forecast based on your last 6 months of data
               </p>
             </div>
@@ -2803,7 +2803,7 @@ function ExpensesPage({
           )}
 
           {/* Recurring Expense Field */}
-          <div className="form-field full" style={{ display: "flex", alignItems: "center", gap: "16px", background: "rgba(255,255,255,0.03)", padding: "10px 14px", borderRadius: "8px", border: "1px solid var(--border-subtle)", margin: "4px 0 10px" }}>
+          <div className="form-field full" style={{ display: "flex", alignItems: "center", gap: "16px", background: "var(--bg-surface)", padding: "10px 14px", borderRadius: "8px", border: "1px solid var(--border-subtle)", margin: "4px 0 10px" }}>
             <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "0.85rem", userSelect: "none" }}>
               <input
                 type="checkbox"
@@ -3128,7 +3128,7 @@ function ExpensesPage({
               <h3 style={{ margin: 0, fontSize: "1.1rem" }}>🧾 Receipt / Bill Preview</h3>
               <button className="ghost-btn small" onClick={() => setReceiptPreviewUrl(null)} style={{ padding: "4px 10px", fontSize: "16px" }}>×</button>
             </div>
-            <div style={{ margin: "12px 0", maxHeight: "65vh", overflow: "auto", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "#000" }}>
+            <div style={{ margin: "12px 0", maxHeight: "65vh", overflow: "auto", borderRadius: "12px", border: "1px solid var(--border-subtle)", background: "#000" }}>
               {receiptPreviewUrl.endsWith(".pdf") ? (
                 <iframe src={`${API}${receiptPreviewUrl}`} title="Receipt PDF" style={{ width: "100%", height: "500px", border: "none" }} />
               ) : (
@@ -3494,7 +3494,7 @@ function ProfilePage({
         alignItems: "center",
         gap: "24px",
         marginBottom: "32px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
+        border: "1px solid var(--border-subtle)",
         backdropFilter: "blur(10px)",
         boxShadow: "0 10px 30px -10px rgba(0,0,0,0.2)"
       }}>
@@ -3527,7 +3527,7 @@ function ProfilePage({
               fontWeight: "600",
               letterSpacing: "1px",
               color: "var(--text-primary)",
-              border: "1px solid rgba(255,255,255,0.05)"
+              border: "1px solid var(--border-subtle)"
             }}>
               {roleText.toUpperCase()}
             </span>
@@ -3539,8 +3539,8 @@ function ProfilePage({
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "24px" }}>
-        <section className="content-card form-card" style={{ background: "var(--bg-secondary)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.03)", padding: "32px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.2)" }}>
-          <div style={{ marginBottom: "24px", borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: "20px" }}>
+        <section className="content-card form-card" style={{ background: "var(--bg-secondary)", borderRadius: "20px", border: "1px solid var(--border-subtle)", padding: "32px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.2)" }}>
+          <div style={{ marginBottom: "24px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "20px" }}>
             <h3 style={{ fontSize: "1.4rem", color: "var(--text-primary)", marginBottom: "4px" }}>{t?.profileSettings || "Personal information"}</h3>
             <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>{t?.personalInfoSubtitle || "Update your profile details"}</p>
           </div>
@@ -3578,11 +3578,11 @@ function ProfilePage({
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "32px 0 24px" }}>
-            <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.05)" }} />
+            <div style={{ flex: 1, height: "1px", background: "var(--bg-surface-hover)" }} />
             <span style={{ fontSize: "0.85rem", color: "var(--brand-primary)", fontWeight: "600", textTransform: "uppercase", letterSpacing: "1px" }}>
               {t?.changePasswordOpt || "Security Settings"}
             </span>
-            <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.05)" }} />
+            <div style={{ flex: 1, height: "1px", background: "var(--bg-surface-hover)" }} />
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "20px" }}>
@@ -3625,29 +3625,29 @@ function ProfilePage({
         </form>
       </section>
 
-      <section className="content-card" style={{ background: "var(--bg-secondary)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.03)", padding: "32px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.2)" }}>
-        <div style={{ marginBottom: "24px", borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: "20px" }}>
+      <section className="content-card" style={{ background: "var(--bg-secondary)", borderRadius: "20px", border: "1px solid var(--border-subtle)", padding: "32px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.2)" }}>
+        <div style={{ marginBottom: "24px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "20px" }}>
           <h3 style={{ fontSize: "1.4rem", color: "var(--text-primary)", marginBottom: "4px" }}>Account details</h3>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>Your account information</p>
         </div>
         <div className="account-details-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
-          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.02)" }}>
+          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ display: "block", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1px" }}>{t?.username || "Username"}</span>
             <strong style={{ fontSize: "1.1rem", color: "var(--text-primary)" }}>@{currentUser?.username}</strong>
           </div>
-          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.02)" }}>
+          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ display: "block", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1px" }}>{t?.role || "Role"}</span>
             <strong style={{ fontSize: "1.1rem", color: "var(--brand-primary)" }}>{getRoleLabel(currentUser)}</strong>
           </div>
-          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.02)" }}>
+          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ display: "block", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1px" }}>{t?.emailAddress || "Email"}</span>
             <strong style={{ fontSize: "1.1rem", color: "var(--text-primary)" }}>{currentUser?.email}</strong>
           </div>
-          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.02)" }}>
+          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ display: "block", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1px" }}>{t?.language || "Language"}</span>
             <strong style={{ fontSize: "1.1rem", color: "var(--text-primary)" }}>{profileForm.language === "bn" ? "🇧🇩 বাংলা" : "🇺🇸 English"}</strong>
           </div>
-          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.02)" }}>
+          <div className="account-detail-item" style={{ background: "var(--bg-tertiary)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ display: "block", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1px" }}>Status</span>
             <strong style={{ color: "#10b981", fontSize: "1.1rem", display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#10b981", boxShadow: "0 0 10px #10b981" }}></span>
@@ -3665,7 +3665,7 @@ function ProfilePage({
         />
         <div style={{ display: "flex", flexDirection: "column", gap: "20px", padding: "8px 0" }}>
           {/* PIN Lock Controller */}
-          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "12px", background: "rgba(255,255,255,0.03)", padding: "14px 18px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "12px", background: "var(--bg-surface)", padding: "14px 18px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "600", fontSize: "0.95rem" }}>
                 <span>🔒</span>
@@ -3719,7 +3719,7 @@ function ProfilePage({
           </div>
 
           {/* Sound Feedback Toggle */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(255,255,255,0.03)", padding: "14px 18px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-surface)", padding: "14px 18px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span style={{ fontSize: "1.2rem" }}>🔊</span>
               <div>

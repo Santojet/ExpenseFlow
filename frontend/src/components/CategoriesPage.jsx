@@ -100,7 +100,7 @@ export default function CategoriesPage({ t, formatMoney }) {
         background: "linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(16, 185, 129, 0.05))",
         padding: "24px 32px",
         borderRadius: "16px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
+        border: "1px solid var(--border-subtle)",
         backdropFilter: "blur(10px)",
         marginBottom: "32px",
         display: "flex",
@@ -137,7 +137,7 @@ export default function CategoriesPage({ t, formatMoney }) {
                 display: "flex",
                 flexDirection: "column",
                 gap: "16px",
-                border: "1px solid rgba(255, 255, 255, 0.05)",
+                border: "1px solid var(--border-subtle)",
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                 cursor: "pointer",
                 position: "relative",
@@ -171,7 +171,7 @@ export default function CategoriesPage({ t, formatMoney }) {
                     {cat.icon}
                   </div>
                   <div style={{ display: "flex", gap: "6px", opacity: 0.7, transition: "opacity 0.2s" }} className="category-actions">
-                    <button className="icon-btn edit" onClick={() => openEdit(cat)} style={{ width: "32px", height: "32px", background: "rgba(255,255,255,0.05)", borderRadius: "8px" }}>✎</button>
+                    <button className="icon-btn edit" onClick={() => openEdit(cat)} style={{ width: "32px", height: "32px", background: "var(--bg-surface-hover)", borderRadius: "8px" }}>✎</button>
                     <button className="icon-btn delete" onClick={() => handleDelete(cat.id)} style={{ width: "32px", height: "32px", background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", borderRadius: "8px" }}>×</button>
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export default function CategoriesPage({ t, formatMoney }) {
         <div className="modal-overlay" style={{ backdropFilter: "blur(12px)", background: "rgba(0,0,0,0.6)" }} onClick={() => setShowModal(false)}>
           <div className="modal-content" style={{
             background: "linear-gradient(to bottom, var(--bg-secondary), var(--bg-primary))",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
+            border: "1px solid var(--border-subtle)",
             boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
             borderRadius: "20px",
             padding: "32px",
@@ -214,7 +214,7 @@ export default function CategoriesPage({ t, formatMoney }) {
                     width: "100%",
                     padding: "16px",
                     background: "var(--bg-tertiary)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    border: "1px solid var(--border-subtle)",
                     borderRadius: "12px",
                     fontSize: "1.1rem",
                     color: "var(--text-primary)",
@@ -229,7 +229,7 @@ export default function CategoriesPage({ t, formatMoney }) {
               <div className="form-row" style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
                 <div className="form-group" style={{ flex: 1 }}>
                   <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "1px" }}>Theme Color</label>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "var(--bg-tertiary)", padding: "8px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "var(--bg-tertiary)", padding: "8px", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}>
                     <input 
                       type="color" 
                       value={formData.color} 
@@ -246,7 +246,7 @@ export default function CategoriesPage({ t, formatMoney }) {
                     value={formData.icon} 
                     onChange={e => setFormData({ ...formData, icon: e.target.value })} 
                     maxLength={2}
-                    style={{ fontSize: "1.5rem", textAlign: "center", padding: "8px", background: "var(--bg-tertiary)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "12px" }}
+                    style={{ fontSize: "1.5rem", textAlign: "center", padding: "8px", background: "var(--bg-tertiary)", border: "1px solid var(--border-subtle)", borderRadius: "12px" }}
                   />
                 </div>
               </div>

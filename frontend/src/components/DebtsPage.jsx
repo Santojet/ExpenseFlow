@@ -213,7 +213,7 @@ export default function DebtsPage({
               type="button"
               className={`ghost-btn small ${filterType === "all" ? "active" : ""}`}
               onClick={() => setFilterType("all")}
-              style={{ background: filterType === "all" ? "var(--brand-primary)" : "rgba(255,255,255,0.05)", color: "#fff" }}
+              style={{ background: filterType === "all" ? "var(--brand-primary)" : "rgba(255,255,255,0.05)", color: "var(--text-primary)" }}
             >
               {t.filterAll || "All"}
             </button>
@@ -221,7 +221,7 @@ export default function DebtsPage({
               type="button"
               className={`ghost-btn small ${filterType === "lent" ? "active" : ""}`}
               onClick={() => setFilterType("lent")}
-              style={{ background: filterType === "lent" ? "var(--success)" : "rgba(255,255,255,0.05)", color: "#fff" }}
+              style={{ background: filterType === "lent" ? "var(--success)" : "rgba(255,255,255,0.05)", color: "var(--text-primary)" }}
             >
               ↗ {t.filterLent || "Lent (পাবো)"}
             </button>
@@ -229,7 +229,7 @@ export default function DebtsPage({
               type="button"
               className={`ghost-btn small ${filterType === "borrowed" ? "active" : ""}`}
               onClick={() => setFilterType("borrowed")}
-              style={{ background: filterType === "borrowed" ? "var(--warning)" : "rgba(255,255,255,0.05)", color: "#fff" }}
+              style={{ background: filterType === "borrowed" ? "var(--warning)" : "rgba(255,255,255,0.05)", color: "var(--text-primary)" }}
             >
               ↙ {t.filterBorrowed || "Borrowed (দিতে হবে)"}
             </button>
@@ -523,7 +523,7 @@ export default function DebtsPage({
               </button>
             </div>
 
-            <div style={{ background: "rgba(255,255,255,0.03)", padding: "12px 16px", borderRadius: "8px", border: "1px solid var(--border-subtle)", marginBottom: "16px", fontSize: "13px" }}>
+            <div style={{ background: "var(--bg-surface)", padding: "12px 16px", borderRadius: "8px", border: "1px solid var(--border-subtle)", marginBottom: "16px", fontSize: "13px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
                 <span style={{ color: "var(--text-secondary)" }}>Person:</span>
                 <strong>{payingDebt.person_name}</strong>

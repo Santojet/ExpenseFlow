@@ -581,3 +581,33 @@ def get_upcoming_expenses():
         "success": True,
         "upcoming": result
     }, 200
+
+@expenses_bp.patch("/<int:expense_id>/status")
+@jwt_required()
+def update_expense_status(expense_id):
+    claims = get_jwt()
+    if claims.get("role") not in ["admin", "super_admin"]:
+        return {"success": False, "message": "Admin privileges required"}, 403
+
+    org_id = claims.get("organization_id")
+    user_id = int(get_jwt_identity())
+    
+    data = request.get_json() or {}
+    status = data.get("status")
+    
+    if status not in ["approved", "rejected", "pending"]:
+        return {"success": False, "message": "Invalid status"}, 400
+
+    expense = db.session.execute(
+        db.select(Expense).where(Expense.id == expense_id, Expense.organization_id == org_id)
+    ).scalar_one_or_none()
+
+    if not expense:
+        return {"success": False, "message": "Expense not found"}, 404
+
+    expense.status = status
+    if status == "approved":
+        expense.approved_by_id = user_id
+        
+    db.session.commit()
+    return {"success": True, "message": f"Expense {status}"}, 200

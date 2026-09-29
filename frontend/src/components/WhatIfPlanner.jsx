@@ -19,7 +19,7 @@ function CustomTooltip({ active, payload, label }) {
         borderRadius: "10px",
         padding: "10px 14px",
       }}>
-        <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px" }}>{label}</div>
+        <div style={{ color: "var(--text-primary)", fontSize: "12px" }}>{label}</div>
         {payload.map((p, i) => (
           <div key={i} style={{ color: p.color, fontWeight: 700, fontSize: "14px" }}>
             ৳{Number(p.value).toLocaleString("en-BD")}
@@ -76,24 +76,21 @@ export default function WhatIfPlanner({ lang = "en" }) {
 
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(6,182,212,0.12) 100%)",
+        background: "linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,182,212,0.1) 100%)",
         border: "1px solid rgba(16,185,129,0.3)",
         borderRadius: "20px",
         padding: "28px 32px",
       }}>
-        <h2 style={{ color: "#fff", fontSize: "22px", fontWeight: 800, marginBottom: "6px" }}>
+        <h2 style={{ color: "var(--text-primary)", fontSize: "22px", fontWeight: 800, marginBottom: "6px" }}>
           📉 "What If" Scenario Planner
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", margin: 0 }}>
+        <p style={{ color: "var(--text-secondary)", fontSize: "14px", margin: 0 }}>
           Simulate your savings growth — see how much you can save over time.
         </p>
       </div>
 
       {/* Controls */}
-      <div style={{
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "16px",
+      <div className="content-card" style={{
         padding: "28px",
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
@@ -102,7 +99,7 @@ export default function WhatIfPlanner({ lang = "en" }) {
         {/* Monthly Saving Slider */}
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-            <label style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", fontWeight: 600 }}>
+            <label style={{ color: "var(--text-primary)", fontSize: "14px", fontWeight: 600 }}>
               Extra Monthly Saving
             </label>
             <span style={{
@@ -119,7 +116,7 @@ export default function WhatIfPlanner({ lang = "en" }) {
             onChange={e => setMonthlySaving(Number(e.target.value))}
             style={{ width: "100%", accentColor: "#10b981", cursor: "pointer", height: "6px" }}
           />
-          <div style={{ display: "flex", justifyContent: "space-between", color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "4px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-secondary)", fontSize: "11px", marginTop: "4px" }}>
             <span>৳500</span>
             <span>৳50,000</span>
           </div>
@@ -128,7 +125,7 @@ export default function WhatIfPlanner({ lang = "en" }) {
         {/* Timeline Slider */}
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-            <label style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", fontWeight: 600 }}>
+            <label style={{ color: "var(--text-primary)", fontSize: "14px", fontWeight: 600 }}>
               Simulation Period
             </label>
             <span style={{
@@ -145,7 +142,7 @@ export default function WhatIfPlanner({ lang = "en" }) {
             onChange={e => setSimMonths(Number(e.target.value))}
             style={{ width: "100%", accentColor: "#06b6d4", cursor: "pointer", height: "6px" }}
           />
-          <div style={{ display: "flex", justifyContent: "space-between", color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "4px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-secondary)", fontSize: "11px", marginTop: "4px" }}>
             <span>3 months</span>
             <span>5 years</span>
           </div>
@@ -161,28 +158,18 @@ export default function WhatIfPlanner({ lang = "en" }) {
             { label: "Total in " + simMonths + " months", value: `৳${((data.projection.at(-1)?.savings) || 0).toLocaleString("en-BD")}`, color: "#06b6d4", icon: "🏦" },
             { label: "Avg Monthly Expense", value: `৳${data.avg_monthly_expense.toLocaleString("en-BD")}`, color: "#f59e0b", icon: "📊" },
           ].map((card, i) => (
-            <div key={i} style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "14px",
-              padding: "18px 20px",
-            }}>
+            <div key={i} className="content-card" style={{ padding: "18px 20px" }}>
               <div style={{ fontSize: "22px", marginBottom: "6px" }}>{card.icon}</div>
               <div style={{ color: card.color, fontSize: "18px", fontWeight: 800 }}>{card.value}</div>
-              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "12px", marginTop: "2px" }}>{card.label}</div>
+              <div style={{ color: "var(--text-secondary)", fontSize: "12px", marginTop: "2px" }}>{card.label}</div>
             </div>
           ))}
         </div>
       )}
 
       {/* Chart */}
-      <div style={{
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "16px",
-        padding: "24px",
-      }}>
-        <h3 style={{ color: "#fff", fontWeight: 700, fontSize: "15px", marginBottom: "20px" }}>
+      <div className="content-card" style={{ padding: "24px" }}>
+        <h3 style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "15px", marginBottom: "20px" }}>
           Savings Projection Chart
         </h3>
         {loading ? (
@@ -198,9 +185,9 @@ export default function WhatIfPlanner({ lang = "en" }) {
                   <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-              <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }} axisLine={false} tickLine={false}
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
+              <XAxis dataKey="month" tick={{ fill: "var(--text-secondary)", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: "var(--text-secondary)", fontSize: 11 }} axisLine={false} tickLine={false}
                 tickFormatter={v => `৳${(v/1000).toFixed(0)}k`} />
               <Tooltip content={<CustomTooltip />} />
               <Area type="monotone" dataKey="savings" stroke="#10b981" strokeWidth={2.5}
@@ -212,13 +199,8 @@ export default function WhatIfPlanner({ lang = "en" }) {
 
       {/* Goal Analysis */}
       {data?.goal_analysis?.length > 0 && (
-        <div style={{
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "16px",
-          padding: "24px",
-        }}>
-          <h3 style={{ color: "#fff", fontWeight: 700, fontSize: "15px", marginBottom: "16px" }}>
+        <div className="content-card" style={{ padding: "24px" }}>
+          <h3 style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "15px", marginBottom: "16px" }}>
             🎯 Goal Achievement Timeline
           </h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -226,17 +208,17 @@ export default function WhatIfPlanner({ lang = "en" }) {
               const pct = Math.min(100, (g.current_savings / g.target_amount) * 100);
               return (
                 <div key={i} style={{
-                  background: "rgba(255,255,255,0.04)",
+                  background: "var(--bg-surface-hover)",
                   borderRadius: "12px",
                   padding: "16px 18px",
                   border: g.is_already_achieved
                     ? "1px solid rgba(16,185,129,0.4)"
-                    : "1px solid rgba(255,255,255,0.06)",
+                    : "1px solid var(--border-subtle)",
                 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
                     <div>
-                      <div style={{ color: "#fff", fontWeight: 700, fontSize: "14px" }}>{g.title}</div>
-                      <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "12px" }}>
+                      <div style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "14px" }}>{g.title}</div>
+                      <div style={{ color: "var(--text-secondary)", fontSize: "12px" }}>
                         ৳{g.current_savings.toLocaleString()} / ৳{g.target_amount.toLocaleString()}
                       </div>
                     </div>
@@ -248,11 +230,11 @@ export default function WhatIfPlanner({ lang = "en" }) {
                           ~{g.months_needed?.toFixed(1)} months
                         </span>
                       ) : (
-                        <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px" }}>Set a saving amount</span>
+                        <span style={{ color: "var(--text-secondary)", fontSize: "12px" }}>Set a saving amount</span>
                       )}
                     </div>
                   </div>
-                  <div style={{ height: "6px", background: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                  <div style={{ height: "6px", background: "var(--border-subtle)", borderRadius: "3px", overflow: "hidden" }}>
                     <div style={{
                       height: "100%", width: `${pct}%`,
                       background: g.is_already_achieved

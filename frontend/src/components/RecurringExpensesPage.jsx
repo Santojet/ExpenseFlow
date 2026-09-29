@@ -60,7 +60,7 @@ function RecurringCard({ expense, onDelete, onSkip }) {
 
       {/* Info */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ color: "#fff", fontWeight: 700, fontSize: "14px", marginBottom: "2px" }}>
+        <div style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "14px", marginBottom: "2px" }}>
           {expense.title}
         </div>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
@@ -70,7 +70,7 @@ function RecurringCard({ expense, onDelete, onSkip }) {
           }}>
             {FREQ_MAP[expense.recurrence_frequency] || expense.recurrence_frequency}
           </span>
-          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px" }}>
+          <span style={{ color: "var(--text-primary)", fontSize: "12px" }}>
             📂 {expense.category}
           </span>
         </div>
@@ -91,7 +91,7 @@ function RecurringCard({ expense, onDelete, onSkip }) {
             : `📅 In ${daysLeft} days`
           }
         </div>
-        <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "1px" }}>
+        <div style={{ color: "var(--text-secondary)", fontSize: "11px", marginTop: "1px" }}>
           {dueDate.toLocaleDateString("en-BD", { day: "numeric", month: "short", year: "numeric" })}
         </div>
       </div>
@@ -238,12 +238,12 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
           { label: "Overdue", value: overdue, icon: "⚠️", color: overdue > 0 ? "#ef4444" : "#10b981" },
         ].map((card, i) => (
           <div key={i} style={{
-            background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
+            background: "var(--bg-surface)", border: "1px solid var(--border-subtle)",
             borderRadius: "14px", padding: "18px 20px",
           }}>
             <div style={{ fontSize: "24px", marginBottom: "6px" }}>{card.icon}</div>
             <div style={{ color: card.color, fontSize: "22px", fontWeight: 800 }}>{card.value}</div>
-            <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "12px", marginTop: "2px" }}>{card.label}</div>
+            <div style={{ color: "var(--text-primary)", fontSize: "12px", marginTop: "2px" }}>{card.label}</div>
           </div>
         ))}
       </div>
@@ -275,7 +275,7 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
             padding: "10px 18px", borderRadius: "10px",
             background: showForm ? "rgba(239,68,68,0.15)" : "linear-gradient(135deg, #7c3aed, #5b21b6)",
             border: showForm ? "1px solid rgba(239,68,68,0.3)" : "none",
-            color: "#fff", cursor: "pointer", fontWeight: 700, fontSize: "14px",
+            color: "var(--text-primary)", cursor: "pointer", fontWeight: 700, fontSize: "14px",
             display: "flex", alignItems: "center", gap: "6px",
             transition: "all 0.25s", boxShadow: showForm ? "none" : "0 4px 15px rgba(124,58,237,0.35)",
           }}
@@ -291,14 +291,14 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
           borderRadius: "16px", padding: "24px",
           animation: "fadeInDown 0.3s ease",
         }}>
-          <h3 style={{ color: "#fff", fontWeight: 700, fontSize: "16px", marginBottom: "20px" }}>
+          <h3 style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "16px", marginBottom: "20px" }}>
             🔄 Add Recurring Expense
           </h3>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "14px" }}>
             {/* Title */}
             <div>
-              <label style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
+              <label style={{ color: "var(--text-primary)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
                 Title *
               </label>
               <input
@@ -307,16 +307,16 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
                 placeholder="e.g. Monthly Rent"
                 required
                 style={{
-                  width: "100%", padding: "10px 12px", background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px",
-                  color: "#fff", fontSize: "14px", outline: "none", boxSizing: "border-box",
+                  width: "100%", padding: "10px 12px", background: "var(--bg-surface-hover)",
+                  border: "1px solid var(--border-subtle)", borderRadius: "8px",
+                  color: "var(--text-primary)", fontSize: "14px", outline: "none", boxSizing: "border-box",
                 }}
               />
             </div>
 
             {/* Amount */}
             <div>
-              <label style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
+              <label style={{ color: "var(--text-primary)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
                 Amount (৳) *
               </label>
               <input
@@ -325,16 +325,16 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
                 placeholder="e.g. 12000"
                 required
                 style={{
-                  width: "100%", padding: "10px 12px", background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px",
-                  color: "#fff", fontSize: "14px", outline: "none", boxSizing: "border-box",
+                  width: "100%", padding: "10px 12px", background: "var(--bg-surface-hover)",
+                  border: "1px solid var(--border-subtle)", borderRadius: "8px",
+                  color: "var(--text-primary)", fontSize: "14px", outline: "none", boxSizing: "border-box",
                 }}
               />
             </div>
 
             {/* Category */}
             <div>
-              <label style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
+              <label style={{ color: "var(--text-primary)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
                 Category *
               </label>
               <select
@@ -342,8 +342,8 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
                 onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
                 style={{
                   width: "100%", padding: "10px 12px", background: "rgba(20,15,40,0.95)",
-                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px",
-                  color: "#fff", fontSize: "14px", outline: "none", boxSizing: "border-box",
+                  border: "1px solid var(--border-subtle)", borderRadius: "8px",
+                  color: "var(--text-primary)", fontSize: "14px", outline: "none", boxSizing: "border-box",
                 }}
               >
                 {allCategories.map(c => <option key={c} value={c}>{c}</option>)}
@@ -352,7 +352,7 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
 
             {/* Start Date */}
             <div>
-              <label style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
+              <label style={{ color: "var(--text-primary)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
                 Start Date *
               </label>
               <input
@@ -360,9 +360,9 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
                 onChange={e => setForm(f => ({ ...f, expense_date: e.target.value }))}
                 required
                 style={{
-                  width: "100%", padding: "10px 12px", background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px",
-                  color: "#fff", fontSize: "14px", outline: "none", boxSizing: "border-box",
+                  width: "100%", padding: "10px 12px", background: "var(--bg-surface-hover)",
+                  border: "1px solid var(--border-subtle)", borderRadius: "8px",
+                  color: "var(--text-primary)", fontSize: "14px", outline: "none", boxSizing: "border-box",
                   colorScheme: "dark",
                 }}
               />
@@ -371,7 +371,7 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
 
           {/* Frequency Selector */}
           <div style={{ marginTop: "14px" }}>
-            <label style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", display: "block", marginBottom: "8px" }}>
+            <label style={{ color: "var(--text-primary)", fontSize: "12px", display: "block", marginBottom: "8px" }}>
               Recurrence Frequency *
             </label>
             <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -387,7 +387,7 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
                     border: form.recurrence_frequency === opt.value
                       ? "1px solid rgba(124,58,237,0.5)"
                       : "1px solid rgba(255,255,255,0.08)",
-                    color: "#fff", cursor: "pointer", fontSize: "13px", fontWeight: 600,
+                    color: "var(--text-primary)", cursor: "pointer", fontSize: "13px", fontWeight: 600,
                     display: "flex", alignItems: "center", gap: "6px",
                     transition: "all 0.2s",
                   }}
@@ -400,7 +400,7 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
 
           {/* Description */}
           <div style={{ marginTop: "14px" }}>
-            <label style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
+            <label style={{ color: "var(--text-primary)", fontSize: "12px", display: "block", marginBottom: "6px" }}>
               Description (optional)
             </label>
             <input
@@ -408,9 +408,9 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               placeholder="Add a note..."
               style={{
-                width: "100%", padding: "10px 12px", background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px",
-                color: "#fff", fontSize: "14px", outline: "none", boxSizing: "border-box",
+                width: "100%", padding: "10px 12px", background: "var(--bg-surface-hover)",
+                border: "1px solid var(--border-subtle)", borderRadius: "8px",
+                color: "var(--text-primary)", fontSize: "14px", outline: "none", boxSizing: "border-box",
               }}
             />
           </div>
@@ -419,7 +419,7 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
             <button type="submit" disabled={submitting} style={{
               padding: "12px 24px", background: "linear-gradient(135deg, #7c3aed, #5b21b6)",
-              border: "none", borderRadius: "10px", color: "#fff", cursor: submitting ? "not-allowed" : "pointer",
+              border: "none", borderRadius: "10px", color: "var(--text-primary)", cursor: submitting ? "not-allowed" : "pointer",
               fontWeight: 700, fontSize: "14px", opacity: submitting ? 0.7 : 1,
               display: "flex", alignItems: "center", gap: "8px",
               boxShadow: "0 4px 15px rgba(124,58,237,0.35)",
@@ -428,9 +428,9 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
               {submitting ? "Adding..." : "Add Recurring Expense"}
             </button>
             <button type="button" onClick={() => setShowForm(false)} style={{
-              padding: "12px 18px", background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px",
-              color: "rgba(255,255,255,0.6)", cursor: "pointer", fontSize: "14px",
+              padding: "12px 18px", background: "var(--bg-surface-hover)",
+              border: "1px solid var(--border-subtle)", borderRadius: "10px",
+              color: "var(--text-primary)", cursor: "pointer", fontSize: "14px",
             }}>
               Cancel
             </button>
@@ -446,15 +446,15 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
       ) : filtered.length === 0 ? (
         <div style={{
           textAlign: "center", padding: "60px 20px",
-          background: "rgba(255,255,255,0.02)",
-          border: "1px solid rgba(255,255,255,0.06)",
+          background: "var(--bg-surface)",
+          border: "1px solid var(--border-subtle)",
           borderRadius: "16px",
         }}>
           <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔄</div>
-          <div style={{ color: "#fff", fontSize: "17px", fontWeight: 700, marginBottom: "8px" }}>
+          <div style={{ color: "var(--text-primary)", fontSize: "17px", fontWeight: 700, marginBottom: "8px" }}>
             {filter === "all" ? "No Recurring Expenses" : "No items in this filter"}
           </div>
-          <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", marginBottom: "20px" }}>
+          <div style={{ color: "var(--text-primary)", fontSize: "14px", marginBottom: "20px" }}>
             {filter === "all"
               ? "Add recurring expenses like rent, bills, subscriptions to track them automatically."
               : "Try changing the filter."}
@@ -462,7 +462,7 @@ export default function RecurringExpensesPage({ notify, customCategories = [] })
           {filter === "all" && (
             <button onClick={() => setShowForm(true)} style={{
               padding: "10px 20px", background: "linear-gradient(135deg, #7c3aed, #5b21b6)",
-              border: "none", borderRadius: "10px", color: "#fff", cursor: "pointer",
+              border: "none", borderRadius: "10px", color: "var(--text-primary)", cursor: "pointer",
               fontWeight: 700, fontSize: "14px", boxShadow: "0 4px 15px rgba(124,58,237,0.35)",
             }}>
               + Add First Recurring Expense

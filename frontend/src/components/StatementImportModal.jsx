@@ -137,9 +137,9 @@ export default function StatementImportModal({ isOpen, onClose, onImportSuccess,
                 }}
                 placeholder="Paste SMS messages (one per line) or CSV data here..."
                 style={{ 
-                  width: "100%", padding: "12px", background: "rgba(255,255,255,0.03)", 
+                  width: "100%", padding: "12px", background: "var(--bg-surface)", 
                   border: "1px solid var(--border-subtle)", borderRadius: "8px", 
-                  color: "#fff", fontSize: "13px", resize: "vertical" 
+                  color: "var(--text-primary)", fontSize: "13px", resize: "vertical" 
                 }}
               />
               
@@ -163,11 +163,11 @@ export default function StatementImportModal({ isOpen, onClose, onImportSuccess,
                 {parsedTransactions.map((tx, idx) => (
                   <div key={idx} style={{ 
                     display: "flex", justifyContent: "space-between", alignItems: "center",
-                    background: "rgba(255,255,255,0.04)", padding: "12px 16px", 
-                    borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)"
+                    background: "var(--bg-surface)", padding: "12px 16px", 
+                    borderRadius: "8px", border: "1px solid var(--border-subtle)"
                   }}>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: "14px", color: "#fff" }}>{tx.title}</div>
+                      <div style={{ fontWeight: 600, fontSize: "14px", color: "var(--text-primary)" }}>{tx.title}</div>
                       <div style={{ fontSize: "12px", color: "var(--text-secondary)", marginTop: "4px" }}>
                         {tx.category} • {tx.expense_date}
                       </div>
