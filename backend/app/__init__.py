@@ -13,6 +13,7 @@ from .routes.goals import goals_bp
 from .routes.debts import debts_bp
 from .routes.categories import categories_bp
 from .routes.summary_api import summary_bp
+from .routes.insights import insights_bp
 
 
 def create_app(config_class=Config):
@@ -53,6 +54,7 @@ def create_app(config_class=Config):
     app.register_blueprint(debts_bp)
     app.register_blueprint(categories_bp)
     app.register_blueprint(summary_bp)
+    app.register_blueprint(insights_bp)
 
     with app.app_context():
         try:

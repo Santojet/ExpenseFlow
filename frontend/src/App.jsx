@@ -22,6 +22,11 @@ import MobileBottomNav from "./components/MobileBottomNav";
 import { playSuccessChime, playExpenseSound, playDebtSound, playSalarySound } from "./utils/audioFeedback";
 import { exportToCsv, generatePdfStatement } from "./utils/exportUtils";
 import CategoriesPage from "./components/CategoriesPage";
+import GamificationDashboard from "./components/GamificationDashboard";
+import WhatIfPlanner from "./components/WhatIfPlanner";
+import PredictiveDashboard from "./components/PredictiveDashboard";
+import RecurringExpensesPage from "./components/RecurringExpensesPage";
+import SmartAlertsPanel, { AlertBadge } from "./components/SmartAlertsPanel";
 
 export const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "https://expenseflow-api-56ap.onrender.com" : "");
 
@@ -37,15 +42,19 @@ const COLORS = [
 ];
 
 const NAV_ITEMS = [
-  { id: "dashboard", icon: "⌂", label: "Dashboard" },
-  { id: "expenses", icon: "↘", label: "Expenses" },
-  { id: "debts", icon: "🤝", label: "Debts & Loans" },
-  { id: "salary", icon: "৳", label: "Salary" },
-  { id: "reports", icon: "◫", label: "Reports" },
-  { id: "budgets", icon: "💰", label: "Budgets" },
-  { id: "goals", icon: "📈", label: "Goals" },
+  { id: "dashboard",  icon: "⌂",  label: "Dashboard" },
+  { id: "expenses",   icon: "↘",  label: "Expenses" },
+  { id: "recurring",  icon: "🔄", label: "Recurring" },
+  { id: "debts",      icon: "🤝", label: "Debts & Loans" },
+  { id: "salary",     icon: "৳",  label: "Salary" },
+  { id: "reports",    icon: "◫",  label: "Reports" },
+  { id: "budgets",    icon: "💰", label: "Budgets" },
+  { id: "goals",      icon: "📈", label: "Goals" },
   { id: "categories", icon: "📌", label: "Categories" },
-  { id: "profile", icon: "◎", label: "Profile" },
+  { id: "gamify",     icon: "🏆", label: "Achievements" },
+  { id: "predict",    icon: "🧠", label: "AI Predict" },
+  { id: "whatif",     icon: "📉", label: "What If" },
+  { id: "profile",    icon: "◎",  label: "Profile" },
 ];
 
 function App() {
@@ -117,6 +126,7 @@ function App() {
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pwaPrompt, setPwaPrompt] = useState(null);
   const [drillUser, setDrillUser] = useState(null); // { id, full_name }
+  const [alertsOpen, setAlertsOpen] = useState(false);
   const notifRef = useRef(null);
 
   // ── Filters ────────────────────────────────────────────────────────────────
@@ -1717,6 +1727,9 @@ function App() {
               🔍 <span style={{ opacity: 0.6, fontSize: "0.75rem" }}>Ctrl+K</span>
             </button>
 
+            {/* Smart Alerts Badge */}
+            <AlertBadge onClick={() => setAlertsOpen(true)} />
+
             {/* Notification Bell */}
             <div className="notif-wrapper" ref={notifRef}>
               <button
@@ -1976,6 +1989,60 @@ function App() {
           />
         )}
 
+        {activePage === "recurring" && (
+          <div className="page-container">
+            <div style={{
+              background: "linear-gradient(135deg,rgba(124,58,237,.15),rgba(6,182,212,.08))",
+              border: "1px solid rgba(124,58,237,.25)",
+              borderRadius: "16px", padding: "24px 28px", marginBottom: "24px",
+            }}>
+              <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 800 }}>🔄 Recurring Expenses</h2>
+              <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
+                Auto-tracked bills, subscriptions & regular payments
+              </p>
+            </div>
+            <RecurringExpensesPage notify={notify} customCategories={customCategories} />
+          </div>
+        )}
+
+        {activePage === "gamify" && (
+          <div className="page-container">
+            <div style={{
+              background: "linear-gradient(135deg,rgba(245,158,11,.15),rgba(124,58,237,.08))",
+              border: "1px solid rgba(245,158,11,.25)",
+              borderRadius: "16px", padding: "24px 28px", marginBottom: "24px",
+            }}>
+              <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 800 }}>🏆 Achievements & Financial Health</h2>
+              <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
+                Your gamified financial journey — badges, streaks & behavioral insights
+              </p>
+            </div>
+            <GamificationDashboard lang={lang} />
+          </div>
+        )}
+
+        {activePage === "predict" && (
+          <div className="page-container">
+            <div style={{
+              background: "linear-gradient(135deg,rgba(16,185,129,.15),rgba(124,58,237,.08))",
+              border: "1px solid rgba(16,185,129,.25)",
+              borderRadius: "16px", padding: "24px 28px", marginBottom: "24px",
+            }}>
+              <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 800 }}>🧠 AI Spending Prediction</h2>
+              <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
+                Machine-learning forecast based on your last 6 months of data
+              </p>
+            </div>
+            <PredictiveDashboard lang={lang} />
+          </div>
+        )}
+
+        {activePage === "whatif" && (
+          <div className="page-container">
+            <WhatIfPlanner lang={lang} />
+          </div>
+        )}
+
         {activePage === "admin" && canAccessAdmin && (
           <AdminPage
             users={filteredUsers}
@@ -2036,6 +2103,13 @@ function App() {
           deferredPrompt={deferredPrompt}
         />
       )}
+
+      {/* Smart Alerts Slide-over Panel */}
+      <SmartAlertsPanel
+        isOpen={alertsOpen}
+        onClose={() => setAlertsOpen(false)}
+        onBudgetClick={() => { setActivePage("budgets"); setAlertsOpen(false); }}
+      />
 
       {resetCodeModal && (
         <ResetCodeModal
