@@ -17,6 +17,7 @@ import {
 import { translations } from "./i18n";
 import DebtsPage from "./components/DebtsPage";
 import SmsParserModal from "./components/SmsParserModal";
+import StatementImportModal from "./components/StatementImportModal";
 import PinLockModal from "./components/PinLockModal";
 import MobileBottomNav from "./components/MobileBottomNav";
 import { playSuccessChime, playExpenseSound, playDebtSound, playSalarySound } from "./utils/audioFeedback";
@@ -129,6 +130,8 @@ function App() {
   const [pwaPrompt, setPwaPrompt] = useState(null);
   const [drillUser, setDrillUser] = useState(null); // { id, full_name }
   const [alertsOpen, setAlertsOpen] = useState(false);
+  const [smsParserOpen, setSmsParserOpen] = useState(false);
+  const [statementImportOpen, setStatementImportOpen] = useState(false);
   const notifRef = useRef(null);
 
   // ── Filters ────────────────────────────────────────────────────────────────
@@ -1893,6 +1896,7 @@ function App() {
             drillUser={drillUser}
             clearDrill={() => { setDrillUser(null); loadExpenses("all"); }}
             onOpenSmsParser={() => setSmsParserOpen(true)}
+            onOpenStatementImport={() => setStatementImportOpen(true)}
             customCategories={customCategories}
             t={t}
           />
@@ -2230,6 +2234,18 @@ function App() {
           }));
           setActivePage("expenses");
           window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        t={t}
+      />
+
+      {/* Batch Statement Auto-Import Modal */}
+      <StatementImportModal
+        isOpen={statementImportOpen}
+        onClose={() => setStatementImportOpen(false)}
+        onImportSuccess={(count) => {
+          setMessage(`Successfully imported ${count} transactions!`);
+          setMessageType("success");
+          loadExpenses(expenseScope, drillUser?.id);
         }}
         t={t}
       />
@@ -2603,6 +2619,7 @@ function ExpensesPage({
   drillUser = null,
   clearDrill = () => {},
   onOpenSmsParser = () => {},
+  onOpenStatementImport = () => {},
   customCategories = [],
   t = {},
 }) {
@@ -2709,6 +2726,14 @@ function ExpensesPage({
                 style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "var(--accent-primary, #6366f1)", fontWeight: 600, fontSize: "0.82rem" }}
               >
                 <span>⚡</span> {t.smsParserBtn || "SMS Parser"}
+              </button>
+              <button
+                type="button"
+                className="ghost-btn"
+                onClick={onOpenStatementImport}
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "var(--success, #10b981)", fontWeight: 600, fontSize: "0.82rem" }}
+              >
+                <span>📥</span> Batch Import
               </button>
               {editingExpenseId ? (
                 <button className="ghost-btn" onClick={() => { resetExpenseForm(); setShowQuantity(false); }}>Cancel</button>

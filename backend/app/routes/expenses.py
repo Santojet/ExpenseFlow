@@ -102,6 +102,62 @@ def upload_receipt():
     }, 200
 
 
+@expenses_bp.post("/batch")
+@jwt_required()
+@limiter.limit("10 per minute")
+def create_expenses_batch():
+    data = request.get_json() or {}
+    expenses_data = data.get("expenses", [])
+    
+    if not isinstance(expenses_data, list) or not expenses_data:
+        return {"success": False, "message": "Valid expenses list is required"}, 400
+
+    claims = get_jwt()
+    organization_id = claims.get("organization_id")
+    user_id = int(get_jwt_identity())
+
+    if not organization_id:
+        return {"success": False, "message": "Organization information missing"}, 400
+
+    created_expenses = []
+    for item in expenses_data:
+        title = str(item.get("title", "")).strip()
+        amount = item.get("amount")
+        category = str(item.get("category", "")).strip()
+        expense_date = item.get("expense_date")
+        
+        if not title or amount is None or not category or not expense_date:
+            continue
+            
+        try:
+            amount = float(amount)
+            expense_date = date.fromisoformat(expense_date)
+            if amount <= 0: continue
+        except (ValueError, TypeError):
+            continue
+            
+        expense = Expense(
+            organization_id=organization_id,
+            user_id=user_id,
+            title=title,
+            amount=amount,
+            category=category,
+            expense_date=expense_date,
+            description=item.get("description", ""),
+        )
+        db.session.add(expense)
+        created_expenses.append(expense)
+        
+    if not created_expenses:
+        return {"success": False, "message": "No valid expenses could be processed"}, 400
+        
+    db.session.commit()
+    return {
+        "success": True,
+        "message": f"Successfully imported {len(created_expenses)} expenses",
+        "count": len(created_expenses)
+    }, 201
+
 @expenses_bp.post("")
 @jwt_required()
 @limiter.limit("60 per minute")
