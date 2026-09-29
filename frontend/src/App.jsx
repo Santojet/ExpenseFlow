@@ -130,7 +130,6 @@ function App() {
   const [pwaPrompt, setPwaPrompt] = useState(null);
   const [drillUser, setDrillUser] = useState(null); // { id, full_name }
   const [alertsOpen, setAlertsOpen] = useState(false);
-  const [smsParserOpen, setSmsParserOpen] = useState(false);
   const [statementImportOpen, setStatementImportOpen] = useState(false);
   const notifRef = useRef(null);
 
