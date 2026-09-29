@@ -27,6 +27,7 @@ import WhatIfPlanner from "./components/WhatIfPlanner";
 import PredictiveDashboard from "./components/PredictiveDashboard";
 import RecurringExpensesPage from "./components/RecurringExpensesPage";
 import SmartAlertsPanel, { AlertBadge } from "./components/SmartAlertsPanel";
+import FinanceCoachPage from "./components/FinanceCoachPage";
 
 export const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "https://expenseflow-api-56ap.onrender.com" : "");
 
@@ -54,6 +55,7 @@ const NAV_ITEMS = [
   { id: "gamify",     icon: "🏆", label: "Achievements" },
   { id: "predict",    icon: "🧠", label: "AI Predict" },
   { id: "whatif",     icon: "📉", label: "What If" },
+  { id: "coach",      icon: "🤖", label: "AI Coach" },
   { id: "profile",    icon: "◎",  label: "Profile" },
 ];
 
@@ -2040,6 +2042,12 @@ function App() {
         {activePage === "whatif" && (
           <div className="page-container">
             <WhatIfPlanner lang={lang} />
+          </div>
+        )}
+
+        {activePage === "coach" && (
+          <div className="page-container">
+            <FinanceCoachPage lang={lang} />
           </div>
         )}
 

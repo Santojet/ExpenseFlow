@@ -545,3 +545,110 @@ def get_gamification():
         "behavioral_insights": behavioral_insights,
         "daily_pattern": daily_pattern,
     }, 200
+
+@insights_bp.get("/coach")
+@jwt_required()
+def behavioral_coach():
+    """Generates personalized financial advice based on recent spending patterns."""
+    user_id = get_jwt_identity()
+    claims = get_jwt()
+    org_id = claims.get("organization_id")
+
+    # Get recent expenses (last 30 days)
+    thirty_days_ago = date.today() - timedelta(days=30)
+    expenses = db.session.execute(
+        db.select(Expense)
+        .where(
+            Expense.organization_id == org_id,
+            Expense.user_id == user_id,
+            Expense.expense_date >= thirty_days_ago.isoformat()
+        )
+    ).scalars().all()
+
+    # Get budgets
+    budgets = db.session.execute(
+        db.select(Budget).where(Budget.organization_id == org_id, Budget.user_id == user_id)
+    ).scalars().all()
+
+    total_spent = sum(e.amount for e in expenses)
+    
+    # Analyze categories
+    category_spending = defaultdict(float)
+    for e in expenses:
+        category_spending[e.category] += e.amount
+
+    advice = []
+    
+    if not expenses:
+        advice.append({
+            "type": "welcome",
+            "title": "Welcome to your Financial Coach",
+            "message": "Start tracking your expenses to receive personalized advice and insights here.",
+            "icon": "👋"
+        })
+        return {"success": True, "advice": advice}, 200
+
+    # 1. High spending category warning
+    if category_spending:
+        top_category = max(category_spending, key=category_spending.get)
+        top_amount = category_spending[top_category]
+        if total_spent > 0 and (top_amount / total_spent) > 0.4:
+            advice.append({
+                "type": "warning",
+                "title": f"High Spending in {top_category}",
+                "message": f"You've spent ৳{top_amount:,.0f} on {top_category} recently, which is {((top_amount/total_spent)*100):.0f}% of your total expenses. Consider setting a strict budget here.",
+                "icon": "⚠️",
+                "action": "Set Budget"
+            })
+
+    # 2. Budget proximity
+    for b in budgets:
+        spent_in_budget = category_spending.get(b.category, 0)
+        if spent_in_budget > b.limit_amount * 0.9 and spent_in_budget <= b.limit_amount:
+            advice.append({
+                "type": "alert",
+                "title": f"Near Limit: {b.category}",
+                "message": f"You are very close to your budget limit for {b.category} (৳{spent_in_budget:,.0f} / ৳{b.limit_amount:,.0f}). Try to pause non-essential spending here.",
+                "icon": "🛑"
+            })
+        elif spent_in_budget > b.limit_amount:
+            advice.append({
+                "type": "danger",
+                "title": f"Over Budget: {b.category}",
+                "message": f"You've exceeded your budget for {b.category} by ৳{(spent_in_budget - b.limit_amount):,.0f}. Let's review where we can cut back next month.",
+                "icon": "📉"
+            })
+
+    # 3. Frequent small transactions (Latte Factor)
+    small_tx = [e for e in expenses if e.amount < 500]
+    if len(small_tx) > 15:
+        total_small = sum(e.amount for e in small_tx)
+        advice.append({
+            "type": "insight",
+            "title": "The 'Latte Factor'",
+            "message": f"You had {len(small_tx)} small transactions (< ৳500) totaling ৳{total_small:,.0f}. Small frequent expenses add up quickly! Keeping an eye on these can boost your savings.",
+            "icon": "☕"
+        })
+
+    # 4. Positive Reinforcement
+    if not any(a["type"] in ["danger", "alert"] for a in advice):
+        advice.append({
+            "type": "success",
+            "title": "Great Budget Discipline!",
+            "message": "You're staying well within your budgets across all categories. Keep up the fantastic work!",
+            "icon": "🌟"
+        })
+
+    # Ensure we always have some advice
+    if len(advice) < 2:
+        advice.append({
+            "type": "tip",
+            "title": "Pro Tip: 50/30/20 Rule",
+            "message": "Try to allocate 50% of your income to needs, 30% to wants, and 20% to savings. This simple rule can transform your financial health.",
+            "icon": "💡"
+        })
+
+    return {
+        "success": True,
+        "advice": advice
+    }, 200
