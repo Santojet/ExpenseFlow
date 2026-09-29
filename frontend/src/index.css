@@ -930,6 +930,48 @@ body.light-mode .sidebar { background: #ffffff; }
 body.light-mode .ring-inner { background: #f8fafc; }
 body.light-mode .filter-select option { background: #ffffff; color: #0f172a; }
 
+/* Legibility fixes for light mode */
+body.light-mode .ghost-btn:hover,
+body.light-mode .nav-item:hover,
+body.light-mode .table-row:hover,
+body.light-mode .hero-ghost,
+body.light-mode .table-icon,
+body.light-mode .action-btn,
+body.light-mode .calendar-nav button,
+body.light-mode .view-toggle-btn:hover:not(.active),
+body.light-mode .refresh-link:hover,
+body.light-mode .notif-bell:hover,
+body.light-mode .export-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .action-btn {
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+body.light-mode .table-icon {
+  color: #475569;
+}
+
+body.light-mode .hero-ghost {
+  color: #0f172a;
+}
+
+body.light-mode .nav-item {
+  color: #475569;
+}
+body.light-mode .nav-item.active {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+body.light-mode .ghost-btn {
+  color: #475569;
+}
+body.light-mode .ghost-btn:hover {
+  color: #0f172a;
+}
 /* ── Light mode toggle button ──────────────────────────────── */
 .theme-toggle-btn {
   display: inline-flex;
