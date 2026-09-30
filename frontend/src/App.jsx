@@ -30,7 +30,9 @@ import RecurringExpensesPage from "./components/RecurringExpensesPage";
 import SmartAlertsPanel, { AlertBadge } from "./components/SmartAlertsPanel";
 import FinanceCoachPage from "./components/FinanceCoachPage";
 
-export const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "https://expenseflow-api-56ap.onrender.com" : "");
+// In production (Vercel), use relative URLs so requests go through Vercel's reverse proxy
+// This avoids CORS issues and Render cold-start timeout problems.
+export const API = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "");
 
 const COLORS = [
   "#7c3aed",
@@ -287,15 +289,24 @@ function App() {
     }
   };
 
-  // Central fetch wrapper — auto-logout on 401
-  const apiFetch = async (url, options = {}) => {
+  // Central fetch wrapper — auto-logout on 401, with retry on network error (Render cold start)
+  const apiFetch = async (url, options = {}, retries = 1) => {
     const headers = { ...authHeaders(), ...options.headers };
-    const response = await fetch(url, { ...options, headers });
-    if (response.status === 401) {
-      _doLogout();
-      throw new Error("Session expired. Please sign in again.");
+    try {
+      const response = await fetch(url, { ...options, headers });
+      if (response.status === 401) {
+        _doLogout();
+        throw new Error("Session expired. Please sign in again.");
+      }
+      return response;
+    } catch (err) {
+      if (retries > 0 && !(err.message && err.message.includes("Session expired"))) {
+        // Wait 2s then retry once (helps with Render cold-start)
+        await new Promise(r => setTimeout(r, 2000));
+        return apiFetch(url, options, retries - 1);
+      }
+      throw err;
     }
-    return response;
   };
 
   const _doLogout = () => {
@@ -1688,7 +1699,17 @@ function App() {
               ↪
             </button>
           </div>
+
+          <button
+            className="sidebar-logout-btn"
+            onClick={handleLogout}
+            id="sidebar-logout-button"
+          >
+            <span className="sidebar-logout-icon">⎋</span>
+            <span>{lang === "bn" ? "লগ আউট" : "Sign Out"}</span>
+          </button>
         </div>
+
       </aside>
 
       <main className="main-content">
