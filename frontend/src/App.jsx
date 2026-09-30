@@ -62,6 +62,15 @@ const NAV_ITEMS = [
   { id: "profile",    icon: "◎",  label: "Profile" },
 ];
 
+// ── Auto-clear stale localStorage on version bump ─────────────────────────
+// This clears old tokens when the app is updated, preventing 422/401 loops
+const APP_VERSION = "2.1";
+if (localStorage.getItem("ef_version") !== APP_VERSION) {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("expenseflow_user");
+  localStorage.setItem("ef_version", APP_VERSION);
+}
+
 function App() {
   // ── Language ──────────────────────────────────────────────────────────────
   const [lang, setLang] = useState(() => {
@@ -289,12 +298,13 @@ function App() {
     }
   };
 
-  // Central fetch wrapper — auto-logout on 401, with retry on network error (Render cold start)
+  // Central fetch wrapper — auto-logout on 401/422 (invalid/expired JWT), with retry on network error
   const apiFetch = async (url, options = {}, retries = 1) => {
     const headers = { ...authHeaders(), ...options.headers };
     try {
       const response = await fetch(url, { ...options, headers });
-      if (response.status === 401) {
+      // 401 = unauthorized, 422 = invalid/malformed JWT token
+      if (response.status === 401 || response.status === 422) {
         _doLogout();
         throw new Error("Session expired. Please sign in again.");
       }
