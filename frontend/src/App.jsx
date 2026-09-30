@@ -30,9 +30,9 @@ import RecurringExpensesPage from "./components/RecurringExpensesPage";
 import SmartAlertsPanel, { AlertBadge } from "./components/SmartAlertsPanel";
 import FinanceCoachPage from "./components/FinanceCoachPage";
 
-// In production (Vercel), use relative URLs so requests go through Vercel's reverse proxy
-// This avoids CORS issues and Render cold-start timeout problems.
-export const API = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "");
+// Always use relative URLs — Vite dev server proxies /api/* to localhost:5000,
+// and Vercel proxies /api/* to Render. This avoids CORS issues everywhere.
+export const API = "";
 
 const COLORS = [
   "#7c3aed",
