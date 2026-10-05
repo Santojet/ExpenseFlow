@@ -299,7 +299,7 @@ function App() {
   };
 
   // Central fetch wrapper — auto-logout on 401, with retry on network error (Render cold start)
-  const apiFetch = async (url, options = {}, retries = 1) => {
+  const apiFetch = async (url, options = {}, retries = 3) => {
     const headers = { ...authHeaders(), ...options.headers };
     try {
       const response = await fetch(url, { ...options, headers });
@@ -307,11 +307,16 @@ function App() {
         _doLogout();
         throw new Error("Session expired. Please sign in again.");
       }
+      // 502/503/504 = backend still waking up (Render cold start) -> retry
+      if ([502, 503, 504].includes(response.status) && retries > 0) {
+        await new Promise(r => setTimeout(r, 3000));
+        return apiFetch(url, options, retries - 1);
+      }
       return response;
     } catch (err) {
       if (retries > 0 && !(err.message && err.message.includes("Session expired"))) {
-        // Wait 2s then retry once (helps with Render cold-start)
-        await new Promise(r => setTimeout(r, 2000));
+        // Wait 3s then retry (helps with Render cold-start)
+        await new Promise(r => setTimeout(r, 3000));
         return apiFetch(url, options, retries - 1);
       }
       throw err;
@@ -505,7 +510,7 @@ function App() {
       if (targetUserId) url += `&user_id=${targetUserId}`;
       const response = await apiFetch(url);
       const data = await safeJson(response);
-      if (!response.ok) throw new Error(data.message || "Failed to load expenses");
+      if (!response.ok) throw new Error(data.message || `Failed to load expenses (HTTP ${response.status})`);
       setExpenses(data.expenses || []);
       setIsAdminView(Boolean(data.is_admin_view));
     } catch (error) {
@@ -519,7 +524,7 @@ function App() {
       if (targetUserId) url += `&user_id=${targetUserId}`;
       const response = await apiFetch(url);
       const data = await safeJson(response);
-      if (!response.ok) throw new Error(data.message || "Failed to load salaries");
+      if (!response.ok) throw new Error(data.message || `Failed to load salaries (HTTP ${response.status})`);
       setSalaries(data.salaries || []);
       if (data.is_admin_view !== undefined) {
         setIsAdminView(Boolean(data.is_admin_view));
