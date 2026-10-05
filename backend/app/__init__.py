@@ -78,6 +78,10 @@ def create_app(config_class=Config):
                     db.session.execute(text("ALTER TABLE expenses ADD COLUMN receipt_url VARCHAR(500)"))
                 if "next_due_date" not in cols:
                     db.session.execute(text("ALTER TABLE expenses ADD COLUMN next_due_date DATE"))
+                if "status" not in cols:
+                    db.session.execute(text("ALTER TABLE expenses ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'approved'"))
+                if "approved_by_id" not in cols:
+                    db.session.execute(text("ALTER TABLE expenses ADD COLUMN approved_by_id INTEGER REFERENCES users(id)"))
                 db.session.commit()
             if "users" in inspector.get_table_names():
                 u_cols = [c["name"] for c in inspector.get_columns("users")]
