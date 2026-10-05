@@ -94,9 +94,16 @@ def create_app(config_class=Config):
 
             # Auto-create admin user if database is empty
             from app.models.user import User
+            from app.models.organization import Organization
             if not db.session.query(User).first():
                 from werkzeug.security import generate_password_hash
+                org = db.session.query(Organization).first()
+                if not org:
+                    org = Organization(name="Default Organization", slug="default")
+                    db.session.add(org)
+                    db.session.flush()
                 admin = User(
+                    organization_id=org.id,
                     username="admin",
                     email="admin@expenseflow.local",
                     password_hash=generate_password_hash("admin123"),
