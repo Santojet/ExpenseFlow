@@ -107,7 +107,7 @@ def get_salaries():
     role = claims.get("role", "user")
 
     target_user_id = request.args.get("user_id", type=int)
-    scope = request.args.get("scope", "all")
+    scope = request.args.get("scope", "my")
 
     query = (
         db.select(Salary)
@@ -115,20 +115,17 @@ def get_salaries():
         .order_by(Salary.salary_month.desc())
     )
 
-    is_admin = role in ("admin", "super_admin")
+    is_super_admin = role == "super_admin"
     is_admin_view = False
 
-    if target_user_id and is_admin:
+    if target_user_id and is_super_admin:
         query = query.where(Salary.user_id == target_user_id)
         is_admin_view = True
-    elif is_admin and scope == "my":
-        query = query.where(Salary.user_id == user_id)
-        is_admin_view = False
-    elif is_admin:
-        # Admins view all organization salaries by default
+    elif is_super_admin and scope == "all":
+        # Only super_admin can view all organization salaries when explicitly requested
         is_admin_view = True
     else:
-        # Regular users only see their own salary
+        # Regular users, admins, and super_admin by default only see their own salary
         query = query.where(Salary.user_id == user_id)
         is_admin_view = False
 
@@ -179,7 +176,7 @@ def update_salary(salary_id):
         Salary.id == salary_id,
         Salary.organization_id == organization_id,
     )
-    if role not in ("admin", "super_admin"):
+    if role != "super_admin":
         query = query.where(Salary.user_id == user_id)
 
     salary = db.session.execute(query).scalar_one_or_none()
@@ -278,7 +275,7 @@ def delete_salary(salary_id):
         Salary.id == salary_id,
         Salary.organization_id == organization_id,
     )
-    if role not in ("admin", "super_admin"):
+    if role != "super_admin":
         query = query.where(Salary.user_id == user_id)
 
     salary = db.session.execute(query).scalar_one_or_none()

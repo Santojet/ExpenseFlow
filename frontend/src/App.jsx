@@ -110,7 +110,7 @@ function App() {
   const [users, setUsers] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [isAdminView, setIsAdminView] = useState(false);
-  const [expenseScope, setExpenseScope] = useState("all"); // "all" | "my"
+  const [expenseScope, setExpenseScope] = useState("my"); // "my" | "all"
   const [budgets, setBudgets] = useState([]);
   const [goals, setGoals] = useState([]);
   const [currentSavings, setCurrentSavings] = useState(0);
@@ -334,6 +334,7 @@ function App() {
     setSalaries([]);
     setUsers([]);
     setMonthlyData([]);
+    setExpenseScope("my");
     setActivePage("dashboard");
     setMessage("");
   };
@@ -346,9 +347,7 @@ function App() {
       if (response.ok && data.success && data.user) {
         setCurrentUser(data.user);
         localStorage.setItem("expenseflow_user", JSON.stringify(data.user));
-        if (data.user.role === "admin" || data.user.role === "super_admin") {
-          setIsAdmin(true);
-        }
+        setIsAdmin(Boolean(data.user.role === "admin" || data.user.role === "super_admin"));
       } else {
         _doLogout();
       }
@@ -364,8 +363,8 @@ function App() {
       // Phase 1: Immediately fetch core dashboard data so UI unlocks fast
       await Promise.allSettled([
         loadCurrentUser(),
-        loadExpenses("all"),
-        loadSalaries("all"),
+        loadExpenses("my"),
+        loadSalaries("my"),
         loadUpcomingExpenses(),
       ]);
     } finally {
@@ -598,10 +597,13 @@ function App() {
       if (data.user) {
         localStorage.setItem("expenseflow_user", JSON.stringify(data.user));
         setCurrentUser(data.user);
-        if (data.user.role === "admin" || data.user.role === "super_admin") {
-          setIsAdmin(true);
-        }
+        setIsAdmin(Boolean(data.user.role === "admin" || data.user.role === "super_admin"));
       }
+      setExpenses([]);
+      setSalaries([]);
+      setUsers([]);
+      setMonthlyData([]);
+      setExpenseScope("my");
       setLoggedIn(true);
       setPassword("");
       notify("Welcome back! Login successful.");
@@ -1976,6 +1978,7 @@ function App() {
             exportSalariesCSV={exportSalariesCSV}
             isAdminView={isAdminView}
             isAdmin={isAdmin}
+            isSuperAdmin={isSuperAdmin}
             expenseScope={expenseScope}
             setExpenseScope={setExpenseScope}
             t={t}
@@ -3214,7 +3217,8 @@ function SalaryPage({
   exportSalariesCSV = null,
   isAdminView = false,
   isAdmin = false,
-  expenseScope = "all",
+  isSuperAdmin = false,
+  expenseScope = "my",
   setExpenseScope = () => {},
   t = {},
 }) {
@@ -3280,8 +3284,8 @@ function SalaryPage({
           subtitle={`${salaries.length} ${t?.transactionsCount || "records"}`}
           action={
             <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-              {/* Admin Scope Toggle */}
-              {isAdmin && (
+              {/* Super Admin Scope Toggle - Salary is confidential */}
+              {isSuperAdmin && (
                 <div className="view-toggle">
                   <button
                     type="button"

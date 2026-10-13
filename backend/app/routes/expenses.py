@@ -282,7 +282,7 @@ def get_expenses():
     role = claims.get("role", "user")
 
     target_user_id = request.args.get("user_id", type=int)
-    scope = request.args.get("scope", "all")
+    scope = request.args.get("scope", "my")
 
     query = (
         db.select(Expense)
@@ -296,14 +296,11 @@ def get_expenses():
     if target_user_id and is_admin:
         query = query.where(Expense.user_id == target_user_id)
         is_admin_view = True
-    elif is_admin and scope == "my":
-        query = query.where(Expense.user_id == user_id)
-        is_admin_view = False
-    elif is_admin:
-        # Admins view all organization expenses by default
+    elif is_admin and scope == "all":
+        # Admins view all organization expenses ONLY when explicitly requesting scope='all'
         is_admin_view = True
     else:
-        # Regular users only see their own expenses
+        # Default: regular users and admins only see their own expenses
         query = query.where(Expense.user_id == user_id)
         is_admin_view = False
 
