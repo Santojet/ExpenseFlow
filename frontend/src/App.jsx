@@ -2168,8 +2168,9 @@ function App() {
         <DeleteConfirmModal
           message={deleteModal.message}
           onConfirm={async () => {
+            const onConfirmFn = deleteModal.onConfirm;
             setDeleteModal(null);
-            await deleteModal.onConfirm();
+            if (onConfirmFn) await onConfirmFn();
           }}
           onCancel={() => setDeleteModal(null)}
         />
@@ -2522,6 +2523,10 @@ function DashboardPage({
                   <strong className="transaction-amount expense-amount">
                     - {formatMoney(expense.amount)}
                   </strong>
+                  <div className="action-buttons" style={{ marginLeft: "8px" }}>
+                    <button type="button" className="icon-btn edit" onClick={() => handleEditExpense(expense)} title="Edit">✎</button>
+                    <button type="button" className="icon-btn delete" onClick={() => handleDeleteExpense(expense.id)} title="Delete">×</button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -3052,9 +3057,13 @@ function ExpensesPage({
                 <h4>{new Date(calSelectedDay + "T00:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}</h4>
                 <div className="cal-expense-list">
                   {expensesByDate[calSelectedDay].map((e) => (
-                    <div key={e.id} className="cal-expense-row">
+                    <div key={e.id} className="cal-expense-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", padding: "8px 12px" }}>
                       <span>{getCategoryIcon(e.category)} {e.title}</span>
-                      <strong style={{ color: "var(--danger)" }}>- {formatMoney(e.amount)}</strong>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <strong style={{ color: "var(--danger)" }}>- {formatMoney(e.amount)}</strong>
+                        <button type="button" className="icon-btn edit" style={{ width: "28px", height: "28px", fontSize: "12px" }} onClick={() => handleEditExpense(e)} title="Edit">✎</button>
+                        <button type="button" className="icon-btn delete" style={{ width: "28px", height: "28px", fontSize: "12px" }} onClick={() => handleDeleteExpense(e.id)} title="Delete">×</button>
+                      </div>
                     </div>
                   ))}
                 </div>

@@ -327,14 +327,16 @@ def update_expense(expense_id):
     claims = get_jwt()
     organization_id = claims.get("organization_id")
     user_id = int(get_jwt_identity())
+    role = claims.get("role", "user")
 
-    expense = db.session.execute(
-        db.select(Expense).where(
-            Expense.id == expense_id,
-            Expense.organization_id == organization_id,
-            Expense.user_id == user_id,
-        )
-    ).scalar_one_or_none()
+    query = db.select(Expense).where(
+        Expense.id == expense_id,
+        Expense.organization_id == organization_id,
+    )
+    if role not in ("admin", "super_admin"):
+        query = query.where(Expense.user_id == user_id)
+
+    expense = db.session.execute(query).scalar_one_or_none()
 
     if not expense:
         return {
@@ -449,14 +451,16 @@ def delete_expense(expense_id):
     claims = get_jwt()
     organization_id = claims.get("organization_id")
     user_id = int(get_jwt_identity())
+    role = claims.get("role", "user")
 
-    expense = db.session.execute(
-        db.select(Expense).where(
-            Expense.id == expense_id,
-            Expense.organization_id == organization_id,
-            Expense.user_id == user_id,
-        )
-    ).scalar_one_or_none()
+    query = db.select(Expense).where(
+        Expense.id == expense_id,
+        Expense.organization_id == organization_id,
+    )
+    if role not in ("admin", "super_admin"):
+        query = query.where(Expense.user_id == user_id)
+
+    expense = db.session.execute(query).scalar_one_or_none()
 
     if not expense:
         return {

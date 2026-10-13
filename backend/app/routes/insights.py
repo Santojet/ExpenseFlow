@@ -550,7 +550,7 @@ def get_gamification():
 @jwt_required()
 def behavioral_coach():
     """Generates personalized financial advice based on recent spending patterns."""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     claims = get_jwt()
     org_id = claims.get("organization_id")
 
@@ -561,21 +561,26 @@ def behavioral_coach():
         .where(
             Expense.organization_id == org_id,
             Expense.user_id == user_id,
-            Expense.expense_date >= thirty_days_ago.isoformat()
+            Expense.expense_date >= thirty_days_ago
         )
     ).scalars().all()
 
-    # Get budgets
+    # Get budgets for the current month
+    current_month = date.today().strftime("%Y-%m")
     budgets = db.session.execute(
-        db.select(Budget).where(Budget.organization_id == org_id, Budget.user_id == user_id)
+        db.select(Budget).where(
+            Budget.organization_id == org_id,
+            Budget.user_id == user_id,
+            Budget.month == current_month,
+        )
     ).scalars().all()
 
-    total_spent = sum(e.amount for e in expenses)
+    total_spent = sum(float(e.amount) for e in expenses)
     
     # Analyze categories
     category_spending = defaultdict(float)
     for e in expenses:
-        category_spending[e.category] += e.amount
+        category_spending[e.category] += float(e.amount)
 
     advice = []
     
@@ -603,26 +608,27 @@ def behavioral_coach():
 
     # 2. Budget proximity
     for b in budgets:
+        budget_limit = float(b.monthly_limit)
         spent_in_budget = category_spending.get(b.category, 0)
-        if spent_in_budget > b.limit_amount * 0.9 and spent_in_budget <= b.limit_amount:
+        if spent_in_budget > budget_limit * 0.9 and spent_in_budget <= budget_limit:
             advice.append({
                 "type": "alert",
                 "title": f"Near Limit: {b.category}",
-                "message": f"You are very close to your budget limit for {b.category} (৳{spent_in_budget:,.0f} / ৳{b.limit_amount:,.0f}). Try to pause non-essential spending here.",
+                "message": f"You are very close to your budget limit for {b.category} (৳{spent_in_budget:,.0f} / ৳{budget_limit:,.0f}). Try to pause non-essential spending here.",
                 "icon": "🛑"
             })
-        elif spent_in_budget > b.limit_amount:
+        elif spent_in_budget > budget_limit:
             advice.append({
                 "type": "danger",
                 "title": f"Over Budget: {b.category}",
-                "message": f"You've exceeded your budget for {b.category} by ৳{(spent_in_budget - b.limit_amount):,.0f}. Let's review where we can cut back next month.",
+                "message": f"You've exceeded your budget for {b.category} by ৳{(spent_in_budget - budget_limit):,.0f}. Let's review where we can cut back next month.",
                 "icon": "📉"
             })
 
     # 3. Frequent small transactions (Latte Factor)
-    small_tx = [e for e in expenses if e.amount < 500]
+    small_tx = [e for e in expenses if float(e.amount) < 500]
     if len(small_tx) > 15:
-        total_small = sum(e.amount for e in small_tx)
+        total_small = sum(float(e.amount) for e in small_tx)
         advice.append({
             "type": "insight",
             "title": "The 'Latte Factor'",

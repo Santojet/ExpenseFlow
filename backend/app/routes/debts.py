@@ -158,14 +158,16 @@ def update_debt(debt_id):
     claims = get_jwt()
     organization_id = claims.get("organization_id")
     user_id = int(get_jwt_identity())
+    role = claims.get("role", "user")
 
-    debt = db.session.execute(
-        db.select(Debt).where(
-            Debt.id == debt_id,
-            Debt.organization_id == organization_id,
-            Debt.user_id == user_id,
-        )
-    ).scalar_one_or_none()
+    query = db.select(Debt).where(
+        Debt.id == debt_id,
+        Debt.organization_id == organization_id,
+    )
+    if role not in ("admin", "super_admin"):
+        query = query.where(Debt.user_id == user_id)
+
+    debt = db.session.execute(query).scalar_one_or_none()
 
     if not debt:
         return {"success": False, "message": "Debt record not found"}, 404
@@ -224,14 +226,16 @@ def record_payment(debt_id):
     claims = get_jwt()
     organization_id = claims.get("organization_id")
     user_id = int(get_jwt_identity())
+    role = claims.get("role", "user")
 
-    debt = db.session.execute(
-        db.select(Debt).where(
-            Debt.id == debt_id,
-            Debt.organization_id == organization_id,
-            Debt.user_id == user_id,
-        )
-    ).scalar_one_or_none()
+    query = db.select(Debt).where(
+        Debt.id == debt_id,
+        Debt.organization_id == organization_id,
+    )
+    if role not in ("admin", "super_admin"):
+        query = query.where(Debt.user_id == user_id)
+
+    debt = db.session.execute(query).scalar_one_or_none()
 
     if not debt:
         return {"success": False, "message": "Debt record not found"}, 404
@@ -276,14 +280,16 @@ def delete_debt(debt_id):
     claims = get_jwt()
     organization_id = claims.get("organization_id")
     user_id = int(get_jwt_identity())
+    role = claims.get("role", "user")
 
-    debt = db.session.execute(
-        db.select(Debt).where(
-            Debt.id == debt_id,
-            Debt.organization_id == organization_id,
-            Debt.user_id == user_id,
-        )
-    ).scalar_one_or_none()
+    query = db.select(Debt).where(
+        Debt.id == debt_id,
+        Debt.organization_id == organization_id,
+    )
+    if role not in ("admin", "super_admin"):
+        query = query.where(Debt.user_id == user_id)
+
+    debt = db.session.execute(query).scalar_one_or_none()
 
     if not debt:
         return {"success": False, "message": "Debt record not found"}, 404

@@ -173,14 +173,16 @@ def update_salary(salary_id):
     claims = get_jwt()
     organization_id = claims.get("organization_id")
     user_id = int(get_jwt_identity())
+    role = claims.get("role", "user")
 
-    salary = db.session.execute(
-        db.select(Salary).where(
-            Salary.id == salary_id,
-            Salary.organization_id == organization_id,
-            Salary.user_id == user_id,
-        )
-    ).scalar_one_or_none()
+    query = db.select(Salary).where(
+        Salary.id == salary_id,
+        Salary.organization_id == organization_id,
+    )
+    if role not in ("admin", "super_admin"):
+        query = query.where(Salary.user_id == user_id)
+
+    salary = db.session.execute(query).scalar_one_or_none()
 
     if not salary:
         return {
@@ -270,14 +272,16 @@ def delete_salary(salary_id):
     claims = get_jwt()
     organization_id = claims.get("organization_id")
     user_id = int(get_jwt_identity())
+    role = claims.get("role", "user")
 
-    salary = db.session.execute(
-        db.select(Salary).where(
-            Salary.id == salary_id,
-            Salary.organization_id == organization_id,
-            Salary.user_id == user_id,
-        )
-    ).scalar_one_or_none()
+    query = db.select(Salary).where(
+        Salary.id == salary_id,
+        Salary.organization_id == organization_id,
+    )
+    if role not in ("admin", "super_admin"):
+        query = query.where(Salary.user_id == user_id)
+
+    salary = db.session.execute(query).scalar_one_or_none()
 
     if not salary:
         return {
